@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Button = (props) => {
+const Button = ({handleClick, text}) => {
   return (
     <div>
-      <button onClick={props.handleClick}>
-        next anecdote
+      <button onClick={handleClick}>
+        {text}
       </button>
     </div>
   )
@@ -13,16 +13,27 @@ const Button = (props) => {
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
-
+  const [points, setPoints] = useState(
+    Array.apply(null, new Array(props.anecdotes.length)).map(Number.prototype.valueOf,0)
+  )
   const chooseRandomAnecdote = () => {
     const anecdotesLength = props.anecdotes.length
     setSelected(Math.floor(Math.random() * Math.floor(anecdotesLength)))
+  }
+  
+  const incrementVote = () => {
+    const tempPoints = [...points]
+    tempPoints[selected] += 1
+    setPoints(tempPoints)
   }
 
   return (
     <div>
       {props.anecdotes[selected]}
-      <Button handleClick={chooseRandomAnecdote}/>
+      <br/>
+      has {points[selected]} votes.
+      <Button handleClick={incrementVote} text={"vote"}/>
+      <Button handleClick={chooseRandomAnecdote} text={"next anecdote"}/>
     </div>
   )
 }
