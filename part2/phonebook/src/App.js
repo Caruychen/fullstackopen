@@ -48,7 +48,7 @@ const App = () => {
     newNumber,
     handleNumberChange
   }
-  
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -56,7 +56,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm {...personsFormProps} />
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons persons={personsToShow} />
     </div>
   )
 }
