@@ -1,26 +1,46 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Button = ({handleClick, text}) => {
+const Button = ({ handleClick, text }) => {
+  return (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+}
+
+const Anecdote = ({ anecdote, points }) => {
   return (
     <div>
-      <button onClick={handleClick}>
-        {text}
-      </button>
+      <h1>Anecdote of the day</h1>
+      <p>
+        {anecdote}
+        <br />
+        has {points} votes.
+      </p>
     </div>
   )
 }
 
-const App = (props) => {
+const MostVoted= ({ anecdote }) => {
+  return (
+    <div>
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdote}</p>
+    </div>
+  )
+}
+
+const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(
-    Array.apply(null, new Array(props.anecdotes.length)).map(Number.prototype.valueOf,0)
+    Array.apply(null, new Array(anecdotes.length)).map(Number.prototype.valueOf, 0)
   )
-  const chooseRandomAnecdote = () => {
-    const anecdotesLength = props.anecdotes.length
-    setSelected(Math.floor(Math.random() * Math.floor(anecdotesLength)))
-  }
   
+  const chooseRandomAnecdote = () => {
+    setSelected(Math.floor(Math.random() * Math.floor(anecdotes.length)))
+  }
+
   const incrementVote = () => {
     const tempPoints = [...points]
     tempPoints[selected] += 1
@@ -28,16 +48,13 @@ const App = (props) => {
   }
 
   const maxVotes = points.indexOf(Math.max(...points))
+
   return (
     <div>
-      <h1>Anecdote of the day</h1>
-      {props.anecdotes[selected]}
-      <br/>
-      has {points[selected]} votes.
-      <Button handleClick={incrementVote} text={"vote"}/>
-      <Button handleClick={chooseRandomAnecdote} text={"next anecdote"}/>
-      <h2>Anecdote with most votes</h2>
-      {props.anecdotes[maxVotes]}
+      <Anecdote anecdote={anecdotes[selected]} points={points[selected]} />
+      <Button handleClick={incrementVote} text={"vote"} />
+      <Button handleClick={chooseRandomAnecdote} text={"next anecdote"} />
+      <MostVoted anecdote={anecdotes[maxVotes]} />
     </div>
   )
 }
