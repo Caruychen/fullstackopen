@@ -35,6 +35,12 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const personsToShow = persons.filter(person => 
+    person.name.toLowerCase().includes(
+      search.toLowerCase()
+    )
+  )
+
   const personsFormProps = {
     addPerson,
     newName,
@@ -42,13 +48,7 @@ const App = () => {
     newNumber,
     handleNumberChange
   }
-
-  const personsToShow = persons.filter(person => 
-    person.name.toLowerCase().includes(
-      search.toLowerCase()
-    )
-  )
-
+  
   return (
     <div>
       <h2>Phonebook</h2>
