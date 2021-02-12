@@ -14,7 +14,7 @@ const Countries = ({countries}) => {
       <Country country={countries[0]}/>
     )
   }
-  return null
+  return <p>No matches found, specify another filter</p>
 }
 
 export default Countries
