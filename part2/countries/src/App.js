@@ -23,14 +23,10 @@ const App = () => {
     return country.name.toLowerCase().includes(search.toLowerCase())
   })
 
-  const showCountries = filterCountries.length > 10
-    ? <div>Too many matches, specify another filter</div>
-    : <Countries countries={filterCountries}/>
-
   return (
     <div>
       <Filter onChange={handleSearchChange}/>
-      {showCountries}
+      <Countries countries={filterCountries}/>
     </div>
   );
 }
