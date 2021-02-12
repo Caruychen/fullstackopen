@@ -9,9 +9,7 @@ const Languages = ({ country }) => {
     <div>
       <h2>languages</h2>
       <ul>
-        {country.languages.map(language => {
-          return <li key={language.name}>{language.name}</li>
-        })}
+        {country.languages.map(language => <li key={language.name}>{language.name}</li>)}
       </ul>
     </div>
   )
