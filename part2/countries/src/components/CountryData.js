@@ -21,12 +21,14 @@ const CountryData = ({ country }) => {
   const [weather, setWeather] = useState({})
 
   useEffect(() => {
+    let isMounted = true
     const api_key = process.env.REACT_APP_API_KEY
     axios
       .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${country.name}`)
       .then(response => {
-        setWeather(response.data)
+        if (isMounted) setWeather(response.data)
       })
+    return () => { isMounted = false }
   }, [])
 
   return (

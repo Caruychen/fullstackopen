@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
-import Filter from './components/Filter'
 import Countries from './components/Countries'
+
+const Filter = ({ onChange }) => <p>find countries <input onChange={onChange} /></p>
 
 const App = () => {
   const [countries, setCountries] = useState([])
