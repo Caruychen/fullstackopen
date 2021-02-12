@@ -1,4 +1,5 @@
 import Country from './Country'
+import CountryData from './CountryData'
 
 const Countries = ({countries}) => {
   if (countries.length > 10) {
@@ -6,12 +7,16 @@ const Countries = ({countries}) => {
   }
   else if (countries.length > 1) {
     return (
-      <div>{countries.map(country => <p key={country.name}>{country.name}</p>)}</div>
+      <div>
+        {countries.map(country => 
+          <Country key={country.name} country={country}/>
+        )}
+      </div>
     )
   }
   else if (countries.length === 1) {
     return (
-      <Country country={countries[0]}/>
+      <CountryData country={countries[0]}/>
     )
   }
   return <p>No matches found, specify another filter</p>
