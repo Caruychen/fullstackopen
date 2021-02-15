@@ -26,7 +26,7 @@ const App = () => {
         .create({ name: newName, number: newNumber })
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          handleMessage(`${newName} added`, 'success')
+          notify('success', `${newName} added`)
         })
     }
     else {
@@ -43,11 +43,12 @@ const App = () => {
         .update(changedPerson)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== changedPerson.id ? person : returnedPerson))
-          handleMessage(`${newName} updated`, 'success')
+          notify('success', `${newName} updated`)
         })
         .catch(error => {
           if (error.response.status === 404) {
-            handleMessage(`Information of ${newName} has already been removed from server`, 'error')
+            notify('error', `Information of ${newName} has already been removed from server`)
+            setPersons(persons.filter(person => person.id !== changedPerson.id))
           }
         })
     }
@@ -58,15 +59,22 @@ const App = () => {
       personService
         .destroy(targetPerson.id)
         .then(response => {
-          handleMessage(`${targetPerson.name} deleted from server.`, 'success')
+          notify('success', `${targetPerson.name} deleted from server.`)
         })
         .catch(error => {
           if (error.response.status === 404) {
-            handleMessage(`${targetPerson.name} was already deleted from server.`, 'error')
+            notify('error', `${targetPerson.name} was already deleted from server.`)
           }
         })
       setPersons(persons.filter(person => person.id !== targetPerson.id))
     }
+  }
+
+  const notify = (status, text) => {
+    setMessage({ status, text })
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000);
   }
 
   const handleNameChange = (event) => {
@@ -81,12 +89,6 @@ const App = () => {
     setSearch(event.target.value)
   }
 
-  const handleMessage = (text, status) => {
-    setMessage({ text, status })
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000);
-  }
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(
       search.toLowerCase()
