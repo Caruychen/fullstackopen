@@ -26,15 +26,12 @@ const App = () => {
         .create({ name: newName, number: newNumber })
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          handleMessage(`${newName} added`, 'success')
         })
     }
     else {
       updatePerson(existingPerson)
     }
-    setMessage(`${newName} added`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000);
     setNewName('')
     setNewNumber('')
   }
@@ -46,6 +43,12 @@ const App = () => {
         .update(changedPerson)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== changedPerson.id ? person : returnedPerson))
+          handleMessage(`${newName} updated`, 'success')
+        })
+        .catch(error => {
+          if (error.response.status === 404) {
+            handleMessage(`Information of ${newName} has already been removed from server`, 'error')
+          }
         })
     }
   }
@@ -54,8 +57,13 @@ const App = () => {
     if (window.confirm(`Delete ${targetPerson.name}?`)) {
       personService
         .destroy(targetPerson.id)
+        .then(response => {
+          handleMessage(`${targetPerson.name} deleted from server.`, 'success')
+        })
         .catch(error => {
-          alert(`${targetPerson.name} was already deleted from server.`)
+          if (error.response.status === 404) {
+            handleMessage(`${targetPerson.name} was already deleted from server.`, 'error')
+          }
         })
       setPersons(persons.filter(person => person.id !== targetPerson.id))
     }
@@ -73,6 +81,12 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const handleMessage = (text, status) => {
+    setMessage({ text, status })
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000);
+  }
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(
       search.toLowerCase()
@@ -90,7 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification message={message} />
       <Filter handleSearchChange={handleSearchChange} />
       <h3>add a new</h3>
       <PersonForm {...personsFormProps} />
