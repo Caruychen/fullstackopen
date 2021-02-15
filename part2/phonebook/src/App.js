@@ -19,21 +19,28 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const newPerson = {
-      id: persons.length + 1,
-      name: newName,
-      number: newNumber
-    }
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-    }
-    else {
+    const existingPerson = persons.find(person => person.name === newName)
+    if (!existingPerson) {
       personService
-        .create(newPerson)
+        .create({ name: newName, number: newNumber })
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          setNewName('')
-          setNewNumber('')
+        })
+    }
+    else {
+      updatePerson(existingPerson)
+    }
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const updatePerson = (person) => {
+    if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      const changedPerson = { ...person, number: newNumber }
+      personService
+        .update(changedPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== changedPerson.id ? person : returnedPerson))
         })
     }
   }
@@ -43,7 +50,7 @@ const App = () => {
       personService
         .destroy(targetPerson.id)
         .catch(error => {
-          alert(`${targetPerson.name} was already deleted from the server.`)
+          alert(`${targetPerson.name} was already deleted from server.`)
         })
       setPersons(persons.filter(person => person.id !== targetPerson.id))
     }
