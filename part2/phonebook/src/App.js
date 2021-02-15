@@ -1,8 +1,9 @@
 import axios from 'axios'
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,20 +12,30 @@ const App = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    personService
+      .getAll()
+      .then(initialPersons => setPersons(initialPersons))
   }, [])
-  
+
   const addPerson = (event) => {
     event.preventDefault()
-    persons.some(person => person.name === newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat({ name: newName, number: newNumber }));
-    setNewName('')
-    setNewNumber('')
+    const newPerson = {
+      id: persons.length + 1,
+      name: newName,
+      number: newNumber
+    }
+    if (persons.some(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+    }
+    else {
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
   }
 
   const handleNameChange = (event) => {
@@ -39,7 +50,7 @@ const App = () => {
     setSearch(event.target.value)
   }
 
-  const personsToShow = persons.filter(person => 
+  const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(
       search.toLowerCase()
     )
