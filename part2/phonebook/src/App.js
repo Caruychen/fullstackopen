@@ -38,6 +38,17 @@ const App = () => {
     }
   }
 
+  const deletePerson = (targetPerson) => () => {
+    if (window.confirm(`Delete ${targetPerson.name}?`)) {
+      personService
+        .destroy(targetPerson.id)
+        .catch(error => {
+          alert(`${targetPerson.name} was already deleted from the server.`)
+        })
+      setPersons(persons.filter(person => person.id !== targetPerson.id))
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -71,7 +82,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm {...personsFormProps} />
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
