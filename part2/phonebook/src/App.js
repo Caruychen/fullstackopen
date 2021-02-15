@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -10,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -30,6 +31,10 @@ const App = () => {
     else {
       updatePerson(existingPerson)
     }
+    setMessage(`${newName} added`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000);
     setNewName('')
     setNewNumber('')
   }
@@ -85,6 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter handleSearchChange={handleSearchChange} />
       <h3>add a new</h3>
       <PersonForm {...personsFormProps} />
