@@ -47,8 +47,8 @@ const App = () => {
         })
         .catch(error => {
           if (error.response.status === 404) {
-            notify('error', `Information of ${newName} has already been removed from server`)
             setPersons(persons.filter(person => person.id !== changedPerson.id))
+            notify('error', `Information of ${newName} has already been removed from server`)
           }
         })
     }
