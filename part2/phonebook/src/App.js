@@ -28,10 +28,9 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           notify('success', `${newName} added`)
         })
+        .catch(error => notify('error', error.response.data.error))
     }
-    else {
-      updatePerson(existingPerson)
-    }
+    else updatePerson(existingPerson)
     setNewName('')
     setNewNumber('')
   }
@@ -50,6 +49,7 @@ const App = () => {
             setPersons(persons.filter(person => person.id !== changedPerson.id))
             notify('error', `Information of ${newName} has already been removed from server`)
           }
+          else notify('error', error.response.data.error)
         })
     }
   }
