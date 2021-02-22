@@ -89,14 +89,28 @@ describe('favorite blog', () => {
     author: "Edsger W. Dijkstra",
     likes: 12
   }
-
   test('of empty list returns null', () => {
     const result = listHelper.favoriteBlog(listWithNoBlog)
     expect(result).toBe(null)
   })
-  test('of non-empty list returns a blog: { title: "Canonical string reduction", author: "Edsger W. Dijkstra", likes: 12 }', 
-  () => {
-    const result = listHelper.favoriteBlog(listWithManyBlogs)
+  test('of non-empty list returns a blog: { title: "Canonical string reduction", author: "Edsger W. Dijkstra", likes: 12 }',
+    () => {
+      const result = listHelper.favoriteBlog(listWithManyBlogs)
+      expect(result).toEqual(expectedResult)
+    })
+})
+
+describe('most blogs', () => {
+  const expectedResult = {
+    author: "Robert C. Martin",
+    blogs: 3
+  }
+  test('of empty list returns null', () => {
+    const result = listHelper.mostBlogs(listWithNoBlog)
+    expect(result).toBe(null)
+  })
+  test('of non-empty list returns: { author: "Robert C. Martin", blogs: 3 }', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs)
     expect(result).toEqual(expectedResult)
   })
 })
