@@ -35,13 +35,29 @@ const mostBlogs = blogs => {
     .toPairs()
     .maxBy(_.last)
     .value()
-    
+
   return { author: authorMostBlogs[0], blogs: authorMostBlogs[1] }
+}
+
+const mostLikes = blogs => {
+  if (blogs.length === 0) return null
+  
+  const reducer = (likeCounts, blog) => {
+    likeCounts[blog.author] = likeCounts[blog.author] + blog.likes || blog.likes
+    return likeCounts
+  }
+  const authorMostLikes = _.chain(_.reduce(blogs, reducer, {}))
+    .toPairs()
+    .maxBy(_.last)
+    .value()
+
+  return { author: authorMostLikes[0], likes: authorMostLikes[1] }
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
