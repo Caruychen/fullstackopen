@@ -48,7 +48,7 @@ describe('adding a new blog', () => {
       .send(missingLikes)
       .expect(201)
       .expect('Content-type', /application\/json/)
-    
+
     const response = await blogsInDb()
     const savedBlog = response.find(blog => {
       return blog.title === missingLikes.title
@@ -69,11 +69,11 @@ describe('deleting a blog', () => {
   test('succeeds with a status of 204 if the id is valid', async () => {
     const blogsAtStart = await blogsInDb()
     const blogToDelete = blogsAtStart[0]
-    
+
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
-    
+
     const blogsAtEnd = await blogsInDb()
 
     expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
@@ -81,6 +81,20 @@ describe('deleting a blog', () => {
     const titles = blogsAtEnd.map(blog => blog.title)
 
     expect(titles).not.toContain(blogToDelete.title)
+  })
+})
+
+describe('updating a blog likes', () => {
+  test('succeeds with a valid id, and returns updated data', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send({ blogToUpdate, likes: blogToUpdate.likes + 1 })
+      .expect(200)
+
+    expect(response.body.likes).toBe(blogToUpdate.likes + 1)
   })
 })
 
