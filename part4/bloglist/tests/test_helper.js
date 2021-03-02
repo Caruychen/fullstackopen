@@ -46,6 +46,11 @@ const missingLikes = {
   url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
 }
 
+const missingTitleAndUrl = {
+  author: 'Edsger W. Dijkstra',
+  likes: 5
+}
+
 module.exports = {
-  initialBlogs, newBlog, missingLikes
+  initialBlogs, newBlog, missingLikes, missingTitleAndUrl
 }
