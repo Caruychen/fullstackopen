@@ -51,6 +51,12 @@ const missingTitleAndUrl = {
   likes: 5
 }
 
+
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
 module.exports = {
-  initialBlogs, newBlog, missingLikes, missingTitleAndUrl
+  initialBlogs, newBlog, missingLikes, missingTitleAndUrl, blogsInDb
 }

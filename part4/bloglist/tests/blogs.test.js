@@ -2,8 +2,9 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+const { initialBlogs, newBlog, missingLikes, missingTitleAndUrl, blogsInDb } = require('./test_helper')
+
 const Blog = require('../models/blog')
-const { initialBlogs, newBlog, missingLikes, missingTitleAndUrl } = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -30,14 +31,14 @@ describe('adding a new blog', () => {
       .expect(201)
       .expect('Content-type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-    const contents = response.body.map(blog => {
+    const response = await blogsInDb()
+    const contents = response.map(blog => {
       const { title, author, url, likes } = blog
       return { title, author, url, likes }
     })
     const { title, author, url, likes } = newBlog
 
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(response).toHaveLength(initialBlogs.length + 1)
     expect(contents).toContainEqual({ title, author, url, likes })
   })
 
@@ -48,8 +49,8 @@ describe('adding a new blog', () => {
       .expect(201)
       .expect('Content-type', /application\/json/)
     
-    const response = await api.get('/api/blogs')
-    const savedBlog = response.body.find(blog => {
+    const response = await blogsInDb()
+    const savedBlog = response.find(blog => {
       return blog.title === missingLikes.title
     })
 
@@ -61,6 +62,25 @@ describe('adding a new blog', () => {
       .post('/api/blogs')
       .send(missingTitleAndUrl)
       .expect(400)
+  })
+})
+
+describe('deleting a blog', () => {
+  test('succeeds with a status of 204 if the id is valid', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+    
+    const blogsAtEnd = await blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
+
+    const titles = blogsAtEnd.map(blog => blog.title)
+
+    expect(titles).not.toContain(blogToDelete.title)
   })
 })
 
