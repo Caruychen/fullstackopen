@@ -40,6 +40,21 @@ describe('adding a new blog', () => {
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
     expect(contents).toContainEqual({ title, author, url, likes })
   })
+
+  test('missing likes defaults the value to 0', async () => {
+    await api
+      .post('/api/blogs')
+      .send(helper.missingLikes)
+      .expect(201)
+      .expect('Content-type', /application\/json/)
+    
+    const response = await api.get('/api/blogs')
+    const savedBlog = response.body.find(blog => {
+      return blog.title === helper.missingLikes.title
+    })
+    
+    expect(savedBlog).toHaveProperty('likes', 0)
+  })
 })
 
 afterAll(() => {
