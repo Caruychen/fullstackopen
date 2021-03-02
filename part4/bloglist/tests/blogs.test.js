@@ -61,9 +61,14 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('all notes are returned', async () => {
+test('all blogs are returned', async () => {
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(initialBlogs.length)
+})
+
+test('returned blog identifiers are named id, not _id', async () => {
+  const response = await api.get('/api/blogs')
+  expect(response.body[0].id).toBeDefined()
 })
 
 afterAll(() => {
