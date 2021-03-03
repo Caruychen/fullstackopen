@@ -18,9 +18,9 @@ describe('when there is initially one user in db', () => {
   test('creating user succeeds with new username', async () => {
     const usersAtStart = await helper.findInDb(User)
     const newUser = {
-      username: 'mluukkai',
-      name: 'Matti Luukkainen',
-      password: 'salainen',
+      username: 'caruyc',
+      name: 'Caruy Chen',
+      password: 'theansweris42',
     }
     await api
       .post('/api/users')
