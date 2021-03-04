@@ -62,19 +62,33 @@ const findInDb = async (model) => {
 const initializeUsers = async () => {
   await User.deleteMany({})
   const passwordHash = await bcrypt.hash('sekret', 10)
-  const user = new User({ username: 'root', passwordHash })
-  await user.save()
+  const usersArray = [
+    new User({ username: 'root', passwordHash }),
+    new User({ username: 'second', passwordHash })
+  ]
+  await usersArray[0].save()
+  await usersArray[1].save()
 }
 
 const initializeBlogs = async () => {
   await Blog.deleteMany({})
-  const blogObjects = initialBlogs.map(blog => new Blog(blog))
+  const user = await User.findOne({})
+  const blogObjects = initialBlogs.map(blog => new Blog({ ...blog, user: user._id }))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 }
 
 const getToken = async () => {
   const user = await User.findOne({ username: 'root' })
+  const userForToken = {
+    username: user.username,
+    id: user._id
+  }
+  return jwt.sign(userForToken, process.env.SECRET)
+}
+
+const getWrongToken = async () => {
+  const user = await User.findOne({ username: 'second' })
   const userForToken = {
     username: user.username,
     id: user._id
@@ -90,5 +104,6 @@ module.exports = {
   findInDb,
   initializeUsers,
   initializeBlogs,
-  getToken
+  getToken,
+  getWrongToken
 }

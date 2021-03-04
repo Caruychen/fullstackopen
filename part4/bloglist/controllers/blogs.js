@@ -35,7 +35,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
   const blog = await Blog.findById(request.params.id)
   if (blog.user.toString() !== decodedToken.id) {
-    return response.status(401).json({ error: 'token does not match user id associated with blog' })
+    return response.status(401).json({ error: 'Unauthorized: incorrect token' })
   }
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()

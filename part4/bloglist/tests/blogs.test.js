@@ -11,14 +11,16 @@ beforeEach(async () => {
   await helper.initializeBlogs()
 })
 
-test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(helper.initialBlogs.length)
-})
+describe('retrieving blogs', () => {
+  test('all blogs are returned', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
 
-test('returned blog identifiers are named id, not _id', async () => {
-  const response = await api.get('/api/blogs')
-  expect(response.body[0].id).toBeDefined()
+  test('returned blog identifiers are named id, not _id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+  })
 })
 
 describe('adding a new blog', () => {
@@ -68,19 +70,7 @@ describe('adding a new blog', () => {
       .expect(400)
   })
 
-  test('with a missing token gets a 401 response', async () => {
-    const response = await api
-      .post('/api/blogs')
-      .send(helper.newBlog)
-      .expect(401)
-      .expect('Content-type', /application\/json/)
-    
-      const savedBlogs = await helper.findInDb(Blog)
-      expect(response.body.error).toEqual('invalid token')
-      expect(savedBlogs).toHaveLength(helper.initialBlogs.length)
-  })
-
-  test('with an incorrect token gets a 401 response', async () => {
+  test('with a malformed token gets a 401 response with appropriate error message', async () => {
     const response = await api
       .post('/api/blogs')
       .send(helper.newBlog)
@@ -88,28 +78,95 @@ describe('adding a new blog', () => {
       .expect(401)
       .expect('Content-type', /application\/json/)
 
-      const savedBlogs = await helper.findInDb(Blog)
-      expect(response.body.error).toEqual('invalid token')
-      expect(savedBlogs).toHaveLength(helper.initialBlogs.length)
+    const savedBlogs = await helper.findInDb(Blog)
+    expect(response.body.error).toEqual('invalid token')
+    expect(savedBlogs).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('without a token gets a 401 response with appropriate error message', async () => {
+    const response = await api
+      .post('/api/blogs')
+      .send(helper.newBlog)
+      .expect(401)
+      .expect('Content-type', /application\/json/)
+
+    const savedBlogs = await helper.findInDb(Blog)
+    expect(response.body.error).toEqual('invalid token')
+    expect(savedBlogs).toHaveLength(helper.initialBlogs.length)
   })
 })
 
 describe('deleting a blog', () => {
-  test('succeeds with a status of 204 if the id is valid', async () => {
+  test('succeeds with a status of 204 if the id and token are valid', async () => {
     const blogsAtStart = await helper.findInDb(Blog)
     const blogToDelete = blogsAtStart[0]
+    const token = await helper.getToken()
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.findInDb(Blog)
-
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
     const titles = blogsAtEnd.map(blog => blog.title)
-
     expect(titles).not.toContain(blogToDelete.title)
+  })
+
+  test('with an incorrect token gets a 401 response with appropriate error message', async () => {
+    const blogsAtStart = await helper.findInDb(Blog)
+    const blogToDelete = blogsAtStart[0]
+    const token = await helper.getWrongToken()
+
+    const response = await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
+      .expect(401)
+
+    expect(response.body.error).toEqual('Unauthorized: incorrect token')
+
+    const blogsAtEnd = await helper.findInDb(Blog)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).toContain(blogToDelete.title)
+  })
+
+  test('with a malformed token gets a 401 response with appropriate error message', async () => {
+    const blogsAtStart = await helper.findInDb(Blog)
+    const blogToDelete = blogsAtStart[0]
+
+    const response = await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer wrongToken`)
+      .expect(401)
+
+    expect(response.body.error).toEqual('invalid token')
+
+    const blogsAtEnd = await helper.findInDb(Blog)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).toContain(blogToDelete.title)
+  })
+
+  test('without a token gets a 401 response with appropriate error message', async () => {
+    const blogsAtStart = await helper.findInDb(Blog)
+    const blogToDelete = blogsAtStart[0]
+
+    const response = await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer wrongToken`)
+      .expect(401)
+
+    expect(response.body.error).toEqual('invalid token')
+
+    const blogsAtEnd = await helper.findInDb(Blog)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).toContain(blogToDelete.title)
   })
 })
 
