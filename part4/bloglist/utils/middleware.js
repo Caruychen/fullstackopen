@@ -1,5 +1,13 @@
 const logger = require('./logger')
 
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
+  request.token = (authorization && authorization.toLowerCase().startsWith('bearer '))
+    ? authorization.substring(7)
+    : null
+  next()
+}
+
 const errorHandler = (error, request, response, next) => {
   if (process.env.NODE_ENV !== 'test') {
     logger.error(error.message)
@@ -13,8 +21,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(401).json({ error: 'invalid token' })
   }
 
-
   next(error)
 }
 
-module.exports = { errorHandler }
+module.exports = { tokenExtractor, errorHandler }
