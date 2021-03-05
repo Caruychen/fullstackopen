@@ -67,6 +67,16 @@ const App = () => {
     }
   }
 
+  const updateBlog = blog => async () => {
+    try {
+      const updatedBlog = await blogService.update(blog)
+      setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? { ...blog, likes: updatedBlog.likes } : blog))
+    }
+    catch (exception) {
+      notify('error', exception.response.data.error)
+    }
+  }
+
   const notify = (status, text) => {
     setMessage({ status, text })
     setTimeout(() => {
@@ -97,7 +107,7 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleUpdate={updateBlog} />
       )}
     </div>
   )
