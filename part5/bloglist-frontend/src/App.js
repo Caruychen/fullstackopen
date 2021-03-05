@@ -15,9 +15,11 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
+  const sortBlogs = blogs => blogs.sort((blog1, blog2) => blog2.likes - blog1.likes)
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(sortBlogs(blogs))
     )
   }, [])
 
@@ -72,8 +74,7 @@ const App = () => {
       const updatedBlog = await blogService.update(blog)
       const newBlogArray = blogs
         .map(blog => blog.id === updatedBlog.id ? { ...blog, likes: updatedBlog.likes } : blog)
-        .sort((blog1, blog2) => blog2.likes - blog1.likes)
-      setBlogs(newBlogArray)
+      setBlogs(sortBlogs(newBlogArray))
     }
     catch (exception) {
       notify('error', exception.response.data.error)
@@ -110,7 +111,7 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleUpdate={updateBlog} />
+        <Blog key={blog.id} blog={blog} handleUpdate={updateBlog} username={user.username}/>
       )}
     </div>
   )
