@@ -70,7 +70,10 @@ const App = () => {
   const updateBlog = blog => async () => {
     try {
       const updatedBlog = await blogService.update(blog)
-      setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? { ...blog, likes: updatedBlog.likes } : blog))
+      const newBlogArray = blogs
+        .map(blog => blog.id === updatedBlog.id ? { ...blog, likes: updatedBlog.likes } : blog)
+        .sort((blog1, blog2) => blog2.likes - blog1.likes)
+      setBlogs(newBlogArray)
     }
     catch (exception) {
       notify('error', exception.response.data.error)
