@@ -98,7 +98,7 @@ const App = () => {
     setMessage({ status, text })
     setTimeout(() => {
       setMessage(null)
-    }, 5000);
+    }, 5000)
   }
 
   const loginFormProps = {
