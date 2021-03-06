@@ -1,5 +1,6 @@
 import React from 'react'
 import Notification from './Notification'
+import FormInput from './FormInput'
 
 const LoginForm = (props) => {
   return (
@@ -7,24 +8,8 @@ const LoginForm = (props) => {
       <h2>Log in to application</h2>
       <Notification message={props.message}/>
       <form onSubmit={props.handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={props.username}
-            name="Username"
-            onChange={({ target }) => props.setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={props.password}
-            name="Password"
-            onChange={({ target }) => props.setPassword(target.value)}
-          />
-        </div>
+        <FormInput value={props.username} text='username' type='text' onChange={props.setUsername}/>
+        <FormInput value={props.password} text='password' type='password' onChange={props.setPassword}/>
         <button type="submit">login</button>
       </form>
     </div>
