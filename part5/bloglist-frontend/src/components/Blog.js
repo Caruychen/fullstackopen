@@ -16,11 +16,11 @@ const Blog = ({ blog, handleUpdate, handleDelete, username }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       {blog.title} {blog.author}
       <button onClick={toggleDetails}>{showDetails ? 'hide' : 'view'}</button>
       {showDetails &&
-        <div>
+        <div className="blogDetails">
           {blog.url}
           <br />
           {blog.likes}<button onClick={handleUpdate(blog)}>like</button>
