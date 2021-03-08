@@ -6,7 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=test jest --verbose --runInBand"
+    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "build:ui": "rm -rf build && cd ../../part5/bloglist-frontend && npm run build && cp -r build ../../part4/bloglist",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "author": "Caruy Chen",
   "license": "ISC",
