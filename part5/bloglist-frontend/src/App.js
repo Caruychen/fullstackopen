@@ -69,7 +69,8 @@ const App = () => {
     }
   }
 
-  const updateBlog = blog => async () => {
+  const updateBlog = async (event, blog) => {
+    event.preventDefault()
     try {
       const updatedBlog = await blogService.update(blog)
       const newBlogArray = blogs
@@ -81,7 +82,8 @@ const App = () => {
     }
   }
 
-  const deleteBlog = blogToDelete => async () => {
+  const deleteBlog = async (event, blogToDelete) => {
+    event.preventDefault()
     try {
       if (window.confirm(`Remove blog ${blogToDelete.title} by ${blogToDelete.author}`)) {
         await blogService.remove(blogToDelete)
