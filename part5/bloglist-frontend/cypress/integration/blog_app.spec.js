@@ -1,7 +1,8 @@
-describe('Blog app', function() {
+describe('Blog app', function () {
   let user
+  let blog
 
-  beforeEach(function() {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
     user = {
       username: 'testuser',
@@ -12,22 +13,20 @@ describe('Blog app', function() {
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.contains('Log in to application')
     cy.contains('username')
     cy.contains('password')
     cy.contains('login').click()
   })
 
-  describe('Login', function() {
-    it('succeeds with correct credentials', function() {
-      cy.get('#username').type('testuser')
-      cy.get('#password').type('secret')
-      cy.get('#login-button').click()
-      cy.contains(`logged in as ${user.name}`)
+  describe('Login', function () {
+    it('succeeds with correct credentials', function () {
+      cy.login({ username: 'testuser', password: 'secret' })
+      cy.contains(`${user.name} logged in`)
     })
 
-    it('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function () {
       cy.get('#username').type('testuser')
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()
@@ -40,22 +39,42 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
-    beforeEach(function() {
-      cy.get('#username').type('testuser')
-      cy.get('#password').type('secret')
-      cy.get('#login-button').click()
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'testuser', password: 'secret' })
+      blog = {
+        title: 'Test Title',
+        author: 'John Smith',
+        url: 'http://www.testurl.com'
+      }
     })
 
     it('A blog can be created', function () {
       cy.contains('new blog').click()
-      cy.get('#title').type('Test Title')
-      cy.get('#author').type('John Smith')
-      cy.get('#url').type('http://www.testurl.com')
+      cy.get('#title').type(blog.title)
+      cy.get('#author').type(blog.author)
+      cy.get('#url').type(blog.url)
       cy.get('#create-blog-button').click()
 
-      cy.contains('a new blog Test Title by John Smith added')
-      cy.contains('Test Title John Smith')
+      cy.contains(`a new blog ${blog.title} by ${blog.author} added`)
+      cy.contains(`${blog.title} ${blog.author}`)
+    })
+
+    describe('and a blog exists', function () {
+      beforeEach(function () {
+        cy.addBlog(blog)
+      })
+
+      it.only('can be liked by a user', function() {
+        cy.contains(`${blog.title} ${blog.author}`)
+          .contains('view')
+          .click()
+
+        cy.contains('like').parent().as('likes')
+        cy.get('@likes').contains('0')
+        cy.get('@likes').find('button').click()
+        cy.get('@likes').contains('1')
+      })
     })
   })
 })
