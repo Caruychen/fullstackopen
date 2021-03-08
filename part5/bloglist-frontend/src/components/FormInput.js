@@ -6,6 +6,7 @@ const FormInput = ({ value, text, type, onChange }) => {
     <div>
       {text}:
       <input
+        id={text}
         type={type}
         value={value}
         name={text}
