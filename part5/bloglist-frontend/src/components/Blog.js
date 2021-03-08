@@ -21,13 +21,16 @@ const Blog = ({ blog, handleUpdate, handleDelete, username }) => {
       <button onClick={toggleDetails}>{showDetails ? 'hide' : 'view'}</button>
       {showDetails &&
         <div className="blogDetails">
-          {blog.url}
-          <br />
-          {blog.likes}<button onClick={handleUpdate(blog)}>like</button>
-          <br />
-          {blog.user.name}
-          <br />
-          {blog.user.username === username && <button onClick={handleDelete(blog)}>remove</button>}
+          <div className="blogUrl">
+            {blog.url}
+          </div>
+          <div className="blogLikes">
+            {blog.likes}<button onClick={handleUpdate(blog)}>like</button>
+          </div>
+          <div className="blogUser">
+            {blog.user.name}
+            {blog.user.username === username && <button onClick={handleDelete(blog)}>remove</button>}
+          </div>
         </div>
       }
     </div>
