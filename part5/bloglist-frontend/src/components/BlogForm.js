@@ -21,7 +21,7 @@ const BlogForm = ({ createBlog }) => {
         <FormInput value={title} text='title' type='text' onChange={setTitle}/>
         <FormInput value={author} text='author' type='text' onChange={setAuthor} />
         <FormInput value={url} text='url' type='text' onChange={setUrl} />
-        <button type="submit">create</button>
+        <button id="create-blog-button" type="submit">create</button>
       </form>
     </div>
   )
