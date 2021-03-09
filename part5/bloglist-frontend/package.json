@@ -39,6 +39,7 @@
     "@testing-library/react": "^11.2.5",
     "cypress": "^6.6.0",
     "eslint-plugin-cypress": "^2.11.2",
-    "eslint-plugin-jest": "^24.1.5"
+    "eslint-plugin-jest": "^24.1.5",
+    "faker": "^5.4.0"
   }
 }

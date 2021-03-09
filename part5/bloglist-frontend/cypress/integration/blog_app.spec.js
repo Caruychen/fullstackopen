@@ -1,3 +1,4 @@
+const { _ } = Cypress
 describe('Blog app', function () {
   let user
   let blog
@@ -9,7 +10,7 @@ describe('Blog app', function () {
       name: 'Test User',
       password: 'secret'
     }
-    cy.request('POST', 'http://localhost:3001/api/users', user)
+    cy.addUser(user)
     cy.visit('http://localhost:3000')
   })
 
@@ -45,7 +46,8 @@ describe('Blog app', function () {
       blog = {
         title: 'Test Title',
         author: 'John Smith',
-        url: 'http://www.testurl.com'
+        url: 'http://www.testurl.com',
+        likes: 0
       }
     })
 
@@ -65,7 +67,7 @@ describe('Blog app', function () {
         cy.addBlog(blog)
       })
 
-      it.only('can be liked by a user', function() {
+      it('liking a blog correctly updates the like count', function () {
         cy.contains(`${blog.title} ${blog.author}`)
           .contains('view')
           .click()
@@ -74,6 +76,51 @@ describe('Blog app', function () {
         cy.get('@likes').contains('0')
         cy.get('@likes').find('button').click()
         cy.get('@likes').contains('1')
+      })
+
+      it('the user who created the blog can delete it', function () {
+        cy.contains(`${blog.title} ${blog.author}`).as('theBlog')
+        cy.get('@theBlog')
+          .contains('view')
+          .click()
+
+        cy.get('@theBlog').contains('remove').click()
+        cy.get('html').should('not.contain', '@theBlog')
+      })
+
+      it('users cannot delete blogs created by others', function () {
+        cy.addUser({ username: 'otheruser', name: 'Other User', password: 'secret' })
+        cy.logout()
+        cy.login({ username: 'otheruser', password: 'secret' })
+
+        cy.contains(`${blog.title} ${blog.author}`).as('theBlog')
+        cy.get('@theBlog')
+          .contains('view')
+          .click()
+        cy.get('@theBlog').should('not.contain', 'remove')
+      })
+    })
+
+    describe('and multiple blogs exist', function () {
+      beforeEach(function () {
+        for (let i = 0; i < 5; i++) {
+          cy.task('newBlog').then(blog => cy.addBlog(blog))
+        }
+      })
+
+      it('blogs are sorted in order from most to least likes', function () {
+        cy.get('.blog > button').then($button => {
+          cy.wrap($button).click({ multiple: true })
+        })
+        cy.get('.blogLikes').then($blogLikes => {
+          _.forEach($blogLikes, (el, index) => {
+            if (index > 0) {
+              const currValue = Number(el.childNodes[0].nodeValue)
+              const prevValue = Number($blogLikes[index - 1].childNodes[0].nodeValue)
+              expect(currValue).to.be.at.most(prevValue)
+            }
+          })
+        })
       })
     })
   })

@@ -31,14 +31,23 @@ Cypress.Commands.add('login', ({ username, password }) => {
     })
 })
 
-Cypress.Commands.add('addBlog', ({ title, author, url }) => {
+Cypress.Commands.add('addBlog', ({ title, author, url, likes }) => {
   cy.request({
     url: 'http://localhost:3001/api/blogs',
     method: 'POST',
-    body: { title, author, url },
+    body: { title, author, url, likes },
     headers: {
       'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBlogappUser')).token}`
     }
   })
+  cy.visit('http://localhost:3000')
+})
+
+Cypress.Commands.add('addUser', ({ username, name, password }) => {
+  cy.request('POST', 'http://localhost:3001/api/users', { username, name, password })
+})
+
+Cypress.Commands.add('logout', () => {
+  localStorage.clear()
   cy.visit('http://localhost:3000')
 })
