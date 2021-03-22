@@ -78,7 +78,7 @@ const CreateNew = (props) => {
     history.push('/')
   }
 
-  const handleReset = (e) => {
+  const handleReset = () => {
     resetContent()
     resetAuthor()
     resetInfo()
