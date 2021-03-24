@@ -3,7 +3,6 @@ import Notification from './Notification'
 import FormInput from './FormInput'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
-import { setNotification } from '../reducers/notificationReducer'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -13,14 +12,9 @@ const LoginForm = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      dispatch(loginUser({ username, password }))
-      setUsername('')
-      setPassword('')
-    }
-    catch (exception) {
-      dispatch(setNotification('error', exception.response.data.error))
-    }
+    dispatch(loginUser({ username, password }))
+    setUsername('')
+    setPassword('')
   }
 
   return (

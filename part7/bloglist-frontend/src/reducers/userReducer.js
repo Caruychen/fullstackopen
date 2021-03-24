@@ -19,18 +19,37 @@ export const setUser = (user) => {
   }
 }
 
+export const initializeUser = () => {
+  return async dispatch => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      blogService.setToken(user.token)
+      dispatch({
+        type: 'SET_USER',
+        data: user
+      })
+    }
+  }
+}
+
 export const loginUser = (credentials) => {
   return async dispatch => {
-    const loggedUser = await loginService.login(credentials)
-    window.localStorage.setItem(
-      'loggedBlogappUser', JSON.stringify(loggedUser)
-    )
-    blogService.setToken(loggedUser.token)
-    dispatch({
-      type: 'SET_USER',
-      data: loggedUser
-    })
-    dispatch(setNotification('success', `logged in as ${loggedUser.name}`))
+    try {
+      const loggedUser = await loginService.login(credentials)
+      window.localStorage.setItem(
+        'loggedBlogappUser', JSON.stringify(loggedUser)
+      )
+      blogService.setToken(loggedUser.token)
+      dispatch({
+        type: 'SET_USER',
+        data: loggedUser
+      })
+      dispatch(setNotification('success', `logged in as ${loggedUser.name}`))
+    }
+    catch (exception) {
+      dispatch(setNotification('error', exception.response.data.error))
+    }
   }
 }
 

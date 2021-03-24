@@ -5,34 +5,20 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import './App.css'
 import { initializeBlogs } from './reducers/blogsReducer'
-import { setUser, logoutUser } from './reducers/userReducer'
+import { initializeUser, logoutUser } from './reducers/userReducer'
+import './App.css'
 
 const App = () => {
   const user = useSelector(state => state.user)
-
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [dispatch])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      blogService.setToken(user.token)
-      dispatch(setUser(user))
-    }
+    dispatch(initializeUser())
   }, [dispatch])
 
   const blogFormRef = useRef()
-
-  const handleToggle = () => {
-    blogFormRef.current.toggleVisibility()
-  }
 
   if (user === null) return <LoginForm />
 
@@ -41,11 +27,10 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       <p>
-        {user.name} logged in
-        <button onClick={() => dispatch(logoutUser())}>logout</button>
+        {user.name} logged in <button onClick={() => dispatch(logoutUser())}>logout</button>
       </p>
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <BlogForm handleToggle={handleToggle} />
+        <BlogForm handleToggle={() => blogFormRef.current.toggleVisibility()} />
       </Togglable>
       <BlogList username={user.username} />
     </div>

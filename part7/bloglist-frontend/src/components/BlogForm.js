@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import FormInput from './FormInput'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogsReducer'
-import { setNotification } from '../reducers/notificationReducer'
 
 const BlogForm = ({ handleToggle }) => {
   const [title, setTitle] = useState('')
@@ -14,16 +13,10 @@ const BlogForm = ({ handleToggle }) => {
   const handleCreate = event => {
     event.preventDefault()
     handleToggle()
-    try {
-      dispatch(createBlog({ title, author, url }))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      dispatch(setNotification('success', `a new blog ${title} by ${author} added`))
-    }
-    catch (exception) {
-      dispatch(setNotification('error', exception.response.data.error))
-    }
+    dispatch(createBlog({ title, author, url }))
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (
