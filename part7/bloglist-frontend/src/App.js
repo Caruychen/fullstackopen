@@ -21,7 +21,6 @@ const App = () => {
   const blogFormRef = useRef()
 
   if (user === null) return <LoginForm />
-
   return (
     <div>
       <h2>blogs</h2>
