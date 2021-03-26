@@ -21,7 +21,7 @@ module.exports = (on, config) => {
   on('task', {
     newBlog() {
       const blog = {
-        title: faker.name.firstName(),
+        title: faker.lorem.sentence(),
         author: faker.name.firstName(),
         url: faker.internet.url(),
         likes: faker.random.number()
