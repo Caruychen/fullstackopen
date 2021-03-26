@@ -31,7 +31,6 @@ export const initializeBlogs = () => {
   }
 }
 
-
 export const createBlog = (blog) => {
   return async dispatch => {
     try {
