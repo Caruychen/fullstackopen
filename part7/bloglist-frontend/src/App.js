@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Menu from './components/Menu'
 import Blogs from './views/Blogs'
 import Blog from './views/Blog'
 import Users from './views/Users'
@@ -7,7 +8,7 @@ import User from './views/User'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import { initializeBlogs } from './reducers/blogsReducer'
-import { initializeProfile, logoutUser } from './reducers/profileReducer'
+import { initializeProfile } from './reducers/profileReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import {
   Switch, Route,
@@ -36,12 +37,9 @@ const App = () => {
   if (profile === null) return <LoginForm />
   return (
     <div>
-      <h2>blogs</h2>
+      <Menu name={profile.name}/>
+      <h2>blog app</h2>
       <Notification />
-      <p>
-        {profile.name} logged in
-      </p>
-      <button onClick={() => dispatch(logoutUser())}>logout</button>
       <Switch>
         <Route path="/users/:id">
           <User user={user} />

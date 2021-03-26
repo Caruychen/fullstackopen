@@ -7,7 +7,7 @@ const Blogs = () => {
   const blogFormRef = useRef()
   return (
     <div>
-      <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <Togglable buttonLabel='create new' ref={blogFormRef}>
         <BlogForm handleToggle={() => blogFormRef.current.toggleVisibility()} />
       </Togglable>
       <BlogList />
