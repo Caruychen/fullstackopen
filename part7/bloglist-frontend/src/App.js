@@ -6,6 +6,10 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import { initializeBlogs } from './reducers/blogsReducer'
 import { initializeProfile, logoutUser } from './reducers/profileReducer'
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from 'react-router-dom'
 import './App.css'
 
 const App = () => {
@@ -23,10 +27,19 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       <p>
-        {profile.name} logged in <button onClick={() => dispatch(logoutUser())}>logout</button>
+        {profile.name} logged in
       </p>
-      <Blogs profile={profile}/>
-      <Users />
+      <button onClick={() => dispatch(logoutUser())}>logout</button>
+      <Router>
+        <Switch>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            <Blogs profile={profile} />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   )
 }
