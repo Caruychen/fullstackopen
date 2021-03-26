@@ -5,27 +5,27 @@ import Users from './views/Users'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import { initializeBlogs } from './reducers/blogsReducer'
-import { initializeUser, logoutUser } from './reducers/userReducer'
+import { initializeProfile, logoutUser } from './reducers/profileReducer'
 import './App.css'
 
 const App = () => {
-  const user = useSelector(state => state.user)
+  const profile = useSelector(state => state.profile)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(initializeBlogs())
-    dispatch(initializeUser())
+    dispatch(initializeProfile())
   }, [dispatch])
 
-  if (user === null) return <LoginForm />
+  if (profile === null) return <LoginForm />
   return (
     <div>
       <h2>blogs</h2>
       <Notification />
       <p>
-        {user.name} logged in <button onClick={() => dispatch(logoutUser())}>logout</button>
+        {profile.name} logged in <button onClick={() => dispatch(logoutUser())}>logout</button>
       </p>
-      <Blogs user={user}/>
+      <Blogs profile={profile}/>
       <Users />
     </div>
   )

@@ -2,31 +2,24 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 
-const userReducer = (state = null, action) => {
+const profileReducer = (state = null, action) => {
   switch (action.type) {
-    case 'SET_USER':
+    case 'LOGIN_USER':
       return action.data
-    case 'REMOVE_USER':
+    case 'LOGOUT_USER':
       return null
     default: return state
   }
 }
 
-export const setUser = (user) => {
-  return {
-    type: 'SET_USER',
-    data: user
-  }
-}
-
-export const initializeUser = () => {
+export const initializeProfile = () => {
   return async dispatch => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
       dispatch({
-        type: 'SET_USER',
+        type: 'LOGIN_USER',
         data: user
       })
     }
@@ -42,7 +35,7 @@ export const loginUser = (credentials) => {
       )
       blogService.setToken(loggedUser.token)
       dispatch({
-        type: 'SET_USER',
+        type: 'LOGIN_USER',
         data: loggedUser
       })
       dispatch(setNotification('success', `logged in as ${loggedUser.name}`))
@@ -56,8 +49,8 @@ export const loginUser = (credentials) => {
 export const logoutUser = () => {
   window.localStorage.removeItem('loggedBlogappUser')
   return {
-    type: 'REMOVE_USER'
+    type: 'LOGOUT_USER'
   }
 }
 
-export default userReducer
+export default profileReducer

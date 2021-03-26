@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Notification from './Notification'
 import FormInput from './FormInput'
 import { useDispatch } from 'react-redux'
-import { loginUser } from '../reducers/userReducer'
+import { loginUser } from '../reducers/profileReducer'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
