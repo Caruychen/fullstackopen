@@ -2,6 +2,16 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useRouteMatch } from 'react-router'
 import { addComment } from '../reducers/blogsReducer'
+import {
+  TextField,
+  Button,
+  TableContainer,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper
+} from '@material-ui/core'
 
 const Comments = ({ comments }) => {
   const [comment, setComment] = useState('')
@@ -20,18 +30,30 @@ const Comments = ({ comments }) => {
     <div>
       <h3>Comments</h3>
       <form onSubmit={handleComment}>
-        <input
+        <TextField
           id='comment-input'
           type='text'
           value={comment}
           name='comment'
           onChange={({ target }) => setComment(target.value)}
-        ></input>
-        <button id="add-comment-button" type='submit'>add comment</button>
+        ></TextField>
+        <Button id="add-comment-button" type='submit'>add comment</Button>
       </form>
-      <ul>
-        {comments.map(comment => <li key={comment.id}>{comment.text}</li>)}
-      </ul>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {comments.map(comment => {
+              return (
+                <TableRow key={comment.id}>
+                  <TableCell>
+                    {comment.text}
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

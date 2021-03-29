@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import FormInput from './FormInput'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogsReducer'
+import {
+  Button
+} from '@material-ui/core'
 
 const BlogForm = ({ handleToggle }) => {
   const [title, setTitle] = useState('')
@@ -26,7 +29,7 @@ const BlogForm = ({ handleToggle }) => {
         <FormInput value={title} text='title' type='text' onChange={setTitle} />
         <FormInput value={author} text='author' type='text' onChange={setAuthor} />
         <FormInput value={url} text='url' type='text' onChange={setUrl} />
-        <button id="create-blog-button" type="submit">create</button>
+        <Button variant="contained" color="primary" id="create-blog-button" type="submit">create</Button>
       </form>
     </div>
   )

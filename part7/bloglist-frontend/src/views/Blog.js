@@ -3,6 +3,13 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
 import Comments from '../components/Comments'
 import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Button
+} from '@material-ui/core'
 
 const Blog = ({ blog, profileUsername }) => {
   const dispatch = useDispatch()
@@ -17,20 +24,24 @@ const Blog = ({ blog, profileUsername }) => {
   if (!blog) return null
   return (
     <div className="blog">
-      <h2>{blog.title}</h2>
-      <div className="blogDetails">
-        <div className="blogUrl">
-          <a href={blog.url}>{blog.url}</a>
-        </div>
-        <div className="blogLikes">
-          {blog.likes}<button onClick={handleUpdate}>like</button>
-        </div>
-        <div className="blogUser">
-          added by {blog.user.name}
-          {blog.user.username === profileUsername && <button onClick={handleDelete}>remove</button>}
-        </div>
-      </div>
-      <Comments comments={blog.comments}/>
+      <Card>
+        <CardContent>
+          <Typography variant="h5" component="h2">
+            {blog.title}
+          </Typography>
+          <Typography variant="body2" component="a" href={blog.url} className="blogUrl">
+            {blog.url}
+          </Typography>
+          <Typography variant="body2" component="p" className="blogLikes">
+            {blog.likes} <Button variant="text" onClick={handleUpdate}>like</Button>
+          </Typography>
+          <Typography variant="body2" component="p" className="blogUser">
+            added by {blog.user.name}
+            {blog.user.username === profileUsername && <Button variant="text" onClick={handleDelete}>remove</Button>}
+          </Typography>
+        </CardContent>
+      </Card>
+      <Comments comments={blog.comments} />
     </div>
   )
 }

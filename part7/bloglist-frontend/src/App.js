@@ -14,7 +14,8 @@ import {
   Switch, Route,
   useRouteMatch
 } from 'react-router-dom'
-import './App.css'
+// import './App.css'
+import Container from '@material-ui/core/Container'
 
 const App = () => {
   const profile = useSelector(state => state.profile)
@@ -36,8 +37,8 @@ const App = () => {
 
   if (profile === null) return <LoginForm />
   return (
-    <div>
-      <Menu name={profile.name}/>
+    <Container>
+      <Menu name={profile.name} />
       <h2>blog app</h2>
       <Notification />
       <Switch>
@@ -48,13 +49,13 @@ const App = () => {
           <Users users={users} />
         </Route>
         <Route path="/blogs/:id">
-          <Blog blog={blog} profileUsername={profile.username}/>
+          <Blog blog={blog} profileUsername={profile.username} />
         </Route>
         <Route path="/">
           <Blogs />
         </Route>
       </Switch>
-    </div>
+    </Container>
   )
 }
 
