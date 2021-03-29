@@ -29,7 +29,7 @@ describe('retrieving comments', () => {
 describe('adding a comment to a blog', () => {
   test('increases the number of comments for the blog by one, and saves content correctly', async () => {
     const blog = await helper.findOneInDb(Blog)
-    const newComment = { text: 'a new comment', blog: blog.id }
+    const newComment = { text: 'a new comment' }
     await api
       .post(`/api/blogs/${blog.id}/comments`)
       .send(newComment)

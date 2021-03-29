@@ -90,9 +90,13 @@ describe('Blog app', function () {
         cy.get('html').should('not.contain', 'remove')
       })
 
-      // it.only('the user can comment on the blog', function () {
-      //   cy.contains(`${blog.title} ${blog.author}`).click()
-      // })
+      it('the user can comment on the blog', function () {
+        const comment = 'superb article!'
+        cy.contains(`${blog.title} ${blog.author}`).click()
+        cy.get('#comment-input').type(comment)
+        cy.get('#add-comment-button').click()
+        cy.contains(comment)
+      })
     })
 
     describe('and multiple blogs exist', function () {

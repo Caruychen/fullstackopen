@@ -13,6 +13,10 @@ const blogReducer = (state = [], action) => {
       const updatedBlog = action.data
       return state.map(blog => blog.id === updatedBlog.id ? { ...blog, likes: updatedBlog.likes } : blog)
     }
+    case 'UPDATE_COMMENTS': {
+      const comment = action.data
+      return state.map(blog => blog.id === comment.blog ? { ...blog, comments: blog.comments.concat(comment) } : blog)
+    }
     case 'DELETE_BLOG': {
       const blogToDelete = action.data
       return state.filter(blog => blog.id !== blogToDelete.id)
@@ -54,6 +58,21 @@ export const updateBlog = (blog) => {
       dispatch({
         type: 'UPDATE_BLOG',
         data: updatedBlog
+      })
+    }
+    catch (exception) {
+      dispatch(setNotification('error', exception.response.data.error))
+    }
+  }
+}
+
+export const addComment = (comment, blogID) => {
+  return async dispatch => {
+    try {
+      const savedComment = await blogService.postComment(comment, blogID)
+      dispatch({
+        type: 'UPDATE_COMMENTS',
+        data: savedComment
       })
     }
     catch (exception) {
