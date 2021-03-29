@@ -6,7 +6,6 @@ import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
 import {
   Card,
   CardContent,
-  CardActions,
   Typography,
   Button
 } from '@material-ui/core'
