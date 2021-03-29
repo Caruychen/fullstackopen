@@ -31,7 +31,7 @@ describe('adding a comment to a blog', () => {
     const blog = await helper.findOneInDb(Blog)
     const newComment = { text: 'a new comment', blog: blog.id }
     await api
-      .post('/api/comments')
+      .post(`/api/blogs/${blog.id}/comments`)
       .send(newComment)
       .expect(201)
       .expect('Content-type', /application\/json/)
@@ -40,8 +40,6 @@ describe('adding a comment to a blog', () => {
     expect(updatedBlog.comments).toHaveLength(blog.comments.length + 1)
   })
 })
-
-
 
 afterAll(() => {
   mongoose.connection.close()
