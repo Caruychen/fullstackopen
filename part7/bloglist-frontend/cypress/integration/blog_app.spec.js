@@ -1,4 +1,3 @@
-const { _ } = Cypress
 describe('Blog app', function () {
   let user
   let blog
@@ -52,7 +51,7 @@ describe('Blog app', function () {
     })
 
     it('A blog can be created', function () {
-      cy.contains('new blog').click()
+      cy.contains('create new').click()
       cy.get('#title').type(blog.title)
       cy.get('#author').type(blog.author)
       cy.get('#url').type(blog.url)
@@ -68,9 +67,7 @@ describe('Blog app', function () {
       })
 
       it('liking a blog correctly updates the like count', function () {
-        cy.contains(`${blog.title} ${blog.author}`)
-          .contains('view')
-          .click()
+        cy.contains(`${blog.title} ${blog.author}`).click()
 
         cy.contains('like').parent().as('likes')
         cy.get('@likes').contains('0')
@@ -79,13 +76,9 @@ describe('Blog app', function () {
       })
 
       it('the user who created the blog can delete it', function () {
-        cy.contains(`${blog.title} ${blog.author}`).as('theBlog')
-        cy.get('@theBlog')
-          .contains('view')
-          .click()
-
-        cy.get('@theBlog').contains('remove').click()
-        cy.get('html').should('not.contain', '@theBlog')
+        cy.contains(`${blog.title} ${blog.author}`).click()
+        cy.contains('remove').click()
+        cy.get('html').should('not.contain', `${blog.title} ${blog.author}`)
       })
 
       it('users cannot delete blogs created by others', function () {
@@ -93,12 +86,13 @@ describe('Blog app', function () {
         cy.logout()
         cy.login({ username: 'otheruser', password: 'secret' })
 
-        cy.contains(`${blog.title} ${blog.author}`).as('theBlog')
-        cy.get('@theBlog')
-          .contains('view')
-          .click()
-        cy.get('@theBlog').should('not.contain', 'remove')
+        cy.contains(`${blog.title} ${blog.author}`).click()
+        cy.get('html').should('not.contain', 'remove')
       })
+
+      // it.only('the user can comment on the blog', function () {
+      //   cy.contains(`${blog.title} ${blog.author}`).click()
+      // })
     })
 
     describe('and multiple blogs exist', function () {
@@ -109,18 +103,17 @@ describe('Blog app', function () {
       })
 
       it('blogs are sorted in order from most to least likes', function () {
-        cy.get('.blog > button').then($button => {
-          cy.wrap($button).click({ multiple: true })
-        })
-        cy.get('.blogLikes').then($blogLikes => {
-          _.forEach($blogLikes, (el, index) => {
-            if (index > 0) {
-              const currValue = Number(el.childNodes[0].nodeValue)
-              const prevValue = Number($blogLikes[index - 1].childNodes[0].nodeValue)
-              expect(currValue).to.be.at.most(prevValue)
-            }
+        let prevValue = null
+        cy.get('.blogItem')
+          .each(($blog, index) => {
+            cy.get('.blogItem > .blogLink').eq(index).click()
+            cy.get('.blogLikes').then($div => {
+              const currValue = Number($div[0].childNodes[0].nodeValue)
+              prevValue && expect(currValue).to.be.at.most(prevValue)
+              prevValue = currValue
+            })
+            cy.go('back')
           })
-        })
       })
     })
   })

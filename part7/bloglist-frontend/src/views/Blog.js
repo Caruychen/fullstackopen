@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
+import Comments from '../components/Comments'
 import { updateBlog, deleteBlog } from '../reducers/blogsReducer'
 
 const Blog = ({ blog, profileUsername }) => {
@@ -29,6 +30,7 @@ const Blog = ({ blog, profileUsername }) => {
           {blog.user.username === profileUsername && <button onClick={handleDelete}>remove</button>}
         </div>
       </div>
+      <Comments comments={blog.comments}/>
     </div>
   )
 }

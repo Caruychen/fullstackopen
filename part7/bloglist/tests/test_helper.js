@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -54,9 +55,26 @@ const missingTitleAndUrl = {
   likes: 5
 }
 
+const initialComments = [
+  {
+    text: 'Wow! Great blog!'
+  },
+  {
+    text: 'interesting...'
+  },
+  {
+    text: 'hello world'
+  }
+]
+
 const findInDb = async (model) => {
   const items = await model.find({})
   return items.map(item => item.toJSON())
+}
+
+const findOneInDb = async (model, id = {}) => {
+  const item = await model.findOne(id)
+  return item.toJSON()
 }
 
 const initializeUsers = async () => {
@@ -75,6 +93,14 @@ const initializeBlogs = async () => {
   const user = await User.findOne({})
   const blogObjects = initialBlogs.map(blog => new Blog({ ...blog, user: user._id }))
   const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
+}
+
+const initializeComments = async () => {
+  await Comment.deleteMany({})
+  const blog = await Blog.findOne({})
+  const commentObjects = initialComments.map(comment => new Comment({ ...comment, blog: blog._id }))
+  const promiseArray = commentObjects.map(comment => comment.save())
   await Promise.all(promiseArray)
 }
 
@@ -98,12 +124,15 @@ const getWrongToken = async () => {
 
 module.exports = {
   initialBlogs,
+  initialComments,
   newBlog,
   missingLikes,
   missingTitleAndUrl,
   findInDb,
+  findOneInDb,
   initializeUsers,
   initializeBlogs,
+  initializeComments,
   getToken,
   getWrongToken
 }
