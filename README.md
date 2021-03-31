@@ -23,9 +23,9 @@ Covers fundamental elements of working with the React-library, and features of J
 The exercises cover building basic React UI to demonstrate component rendering, state management, event handling and debugging React applications.
 
 [Solutions](https://github.com/Caruychen/fullstackopen/tree/main/part1)
-* [courseinfo](https://github.com/Caruychen/fullstackopen/tree/main/part1/courseinfo)
-* [unicafe](https://github.com/Caruychen/fullstackopen/tree/main/part1/unicafe)
-* [anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part1/anecdotes)
+* [courseinfo](https://github.com/Caruychen/fullstackopen/tree/main/part1/courseinfo) - Basic course information page.
+* [unicafe](https://github.com/Caruychen/fullstackopen/tree/main/part1/unicafe) - Feedback and stats app.
+* [anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part1/anecdotes) - random anecdote generator.
 
 ## Part 2 - [Communicating with server](https://fullstackopen.com/en/part2)
 
@@ -35,9 +35,9 @@ communicating with a backend REST API, and basic CSS styling.
 The exercises demonstrate these concepts in three parts. 
 
 [Solutions](https://github.com/Caruychen/fullstackopen/tree/main/part2)
-* [courseinfo](https://github.com/Caruychen/fullstackopen/tree/main/part2/courseinfo)
-* [phonebook](https://github.com/Caruychen/fullstackopen/tree/main/part2/phonebook)
-* [countries](https://github.com/Caruychen/fullstackopen/tree/main/part2/countries)
+* [courseinfo](https://github.com/Caruychen/fullstackopen/tree/main/part2/courseinfo) - Refactored courseinfo page from part 1 with modularised code.
+* [phonebook](https://github.com/Caruychen/fullstackopen/tree/main/part2/phonebook) - Phonebook app with basic CSS styling.
+* [countries](https://github.com/Caruychen/fullstackopen/tree/main/part2/countries) - React app that communicates with the https://restcountries.eu api.
 
 ## Part 3 - [Programming a server with NodeJs and Express](https://fullstackopen.com/en/part3)
 
@@ -76,8 +76,8 @@ Exercises refactor previous assignments to use Redux hooks in state management, 
 and communicating with the server in a redux app. Also touches on the connect-function, an older approach to state management in Redux.
 
 [Solutions](https://github.com/Caruychen/fullstackopen/tree/main/part6)
-* [unicafe-redux](https://github.com/Caruychen/fullstackopen/tree/main/part6/unicafe-redux)
-* [redux-anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part6/redux-anecdotes)
+* [unicafe-redux](https://github.com/Caruychen/fullstackopen/tree/main/part6/unicafe-redux) - Refactors the feedback and stats unicafe app from part 1 to manage state using Redux.
+* [redux-anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part6/redux-anecdotes) - Refactors the anecdotes app from part 1 to use Redux state management, and implements REST communications with a server with Redux-thunk. A Mock server is created using json-server.
 
 ## Part 7 - [React router, custom hooks, styling app with CSS and webpack](https://fullstackopen.com/en/part7)
 
@@ -85,17 +85,28 @@ Covers a range of topics:
 * Using React router to divide the application into different views based on the URL in the browser.
 * Applying CSS-style components
 * Webpack, and how to configure the application manually.
+* Class components.
 * Deeper look at hook-functions, and custom hooks.
 
 Exercises expand the functionality of the blog list application, and includes other projects to demonstrate various concepts covered
 in the subject.
 
 [Solutions](https://github.com/Caruychen/fullstackopen/tree/main/part7)
-* [bloglist-backend](https://github.com/Caruychen/fullstackopen/tree/main/part7/bloglist)
+* [routed-anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part7/routed-anecdotes) - Implement URL routing and custom hooks for anecdotes app.
+* [country-hook](https://github.com/Caruychen/fullstackopen/tree/main/part7/country-hook) - Modify the country app to interact with APIs using a custom hook.
+* [ultimate-hooks](https://github.com/Caruychen/fullstackopen/tree/main/part7/ultimate-hooks) - Practice implementing hooks and custom
+hooks that communicate with a server.
+* [bloglist-backend](https://github.com/Caruychen/fullstackopen/tree/main/part7/bloglist) - Extending the backend for the bloglist app to include commenting functionality.
 * [bloglist-frontend](https://github.com/Caruychen/fullstackopen/tree/main/part7/bloglist-frontend)
-* [ultimate-hooks](https://github.com/Caruychen/fullstackopen/tree/main/part7/ultimate-hooks)
-* [country-hook](https://github.com/Caruychen/fullstackopen/tree/main/part7/country-hook)
-* [routed-anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part7/routed-anecdotes)
+  * Refactor application state management from using internal React component state to using React.
+  * Implement Router to add views:
+    * Showing basic information regarding users.
+    * Individual users' blog posts.
+    * Showing detailed views of a single blog post.
+  * Implement navigation.
+  * Implement comment functionality.
+  * Add CSS styles using Material-UI.
+
 
 ## Part 8 - [GraphQL](https://fullstackopen.com/en/part8)
 
