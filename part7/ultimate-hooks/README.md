@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Ultimate-Hooks
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A practice project for implementing hooks, and custom hooks that communicate with a server. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
