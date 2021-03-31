@@ -1,7 +1,6 @@
 # Full Stack open 2021
 
 ## Part 0 - [Fundamentals of Web apps](https://fullstackopen.com/en/part0)
-
 ### 0.4 New Note
 Diagram depicts communications where a user creates a new note on a traditional web page: https://studies.cs.helsinki.fi/exampleapp/notes.
 ![new_note](./0.4_NewNote.png)
