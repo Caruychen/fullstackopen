@@ -1,1 +1,3 @@
-# Part2 Data for Countries
+# Countries
+
+This application retrieves basic country data from https://restcountries.eu.
