@@ -24,7 +24,7 @@ The exercises cover building basic React UI to demonstrate component rendering, 
 
 [Solutions](https://github.com/Caruychen/fullstackopen/tree/main/part1)
 * [courseinfo](https://github.com/Caruychen/fullstackopen/tree/main/part1/courseinfo) - Basic course information page.
-* [unicafe](https://github.com/Caruychen/fullstackopen/tree/main/part1/unicafe) - Feedback and stats app.
+* [unicafe](https://github.com/Caruychen/fullstackopen/tree/main/part1/unicafe) - Web application for collecting user feedback and, and showing statistics.
 * [anecdotes](https://github.com/Caruychen/fullstackopen/tree/main/part1/anecdotes) - random anecdote generator.
 
 ## Part 2 - [Communicating with server](https://fullstackopen.com/en/part2)
