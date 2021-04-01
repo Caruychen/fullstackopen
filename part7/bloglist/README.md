@@ -1,4 +1,4 @@
-# Part 7 Bloglist - backend
+# Bloglist - backend
 
 RESTful API backend created in NodeJS using express. Serves as the endpoints for the expaned [blog list application](../bloglist-frontend).
 
