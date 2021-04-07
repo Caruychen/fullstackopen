@@ -41,11 +41,11 @@ const Authors = (props) => {
             </th>
           </tr>
           {authors.map(a =>
-            <Author key={a.name} author={a}/>
+            <Author key={a.name} author={a} />
           )}
         </tbody>
       </table>
-      <BirthYearSetter />
+      <BirthYearSetter authors={authors} />
     </div>
   )
 }
