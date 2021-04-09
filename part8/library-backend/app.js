@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server')
+const { gql, UserInputError } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const _ = require('lodash')
 require('dotenv').config()
@@ -81,24 +81,46 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author })
-        await author.save()
+        try {
+          await author.save()
+        }
+        catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args.author
+          })
+        }
       }
       const book = new Book({
         ...args,
         author: author._id
       })
-      let savedBook = await book.save()
-      return await savedBook.populate('Author').execPopulate()
+      try {
+        await book.save()
+      }
+      catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
+      return await book.populate('Author').execPopulate()
     },
-    addAuthor: (root, args) => {
+    addAuthor: async (root, args) => {
       const author = new Author({ ...args })
-      return author.save()
+      try {
+        await author.save()
+      }
+      catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
+      return author
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
       if (!author) return null
       author.born = args.setBornTo
-      return author.save()
+      return await author.save()
     }
   },
   Author: {
