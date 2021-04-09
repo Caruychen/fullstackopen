@@ -46,7 +46,8 @@ const resolvers = {
       }
       return author
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, { currentUser }) => {
+      if (!currentUser) throw new UserInputError('not authenticated')
       const author = await Author.findOne({ name: args.name })
       if (!author) return null
       author.born = args.setBornTo

@@ -1,6 +1,6 @@
 const { makeExecutableSchema } = require('apollo-server')
 const { merge } = require('lodash')
-const { 
+const {
   typeDef: Author,
   resolvers: authorResolvers
 } = require('./schemas/author')
@@ -8,6 +8,10 @@ const {
   typeDef: Book,
   resolvers: bookResolvers
 } = require('./schemas/book')
+const {
+  typeDef: User,
+  resolvers: userResolvers
+} = require('./schemas/user')
 
 const Base = `
   type Query {
@@ -19,8 +23,8 @@ const Base = `
 `
 
 const schema = makeExecutableSchema({
-  typeDefs: [Base, Author, Book],
-  resolvers: merge(authorResolvers, bookResolvers)
+  typeDefs: [Base, Author, Book, User],
+  resolvers: merge(authorResolvers, bookResolvers, userResolvers)
 })
 
 module.exports = schema

@@ -40,7 +40,9 @@ const resolvers = {
     }
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, { currentUser }) => {
+      if (!currentUser) throw new UserInputError('not authenticated')
+
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author })
@@ -53,6 +55,7 @@ const resolvers = {
           })
         }
       }
+
       const book = new Book({
         ...args,
         author: author._id
@@ -65,6 +68,7 @@ const resolvers = {
           invalidArgs: args
         })
       }
+
       return await book.populate('Author').execPopulate()
     },
   },
