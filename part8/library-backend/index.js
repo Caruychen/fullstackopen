@@ -1,7 +1,7 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
 const { ApolloServer } = require('apollo-server')
-const schema = require('./graphql/schema')
+const schema = require('./graphql')
 
 const mongoUrl = process.env.MONGODB_URI
 console.log('connecting to', mongoUrl)
