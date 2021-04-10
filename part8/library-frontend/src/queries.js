@@ -19,6 +19,7 @@ query {
       name
     }
     published
+    genres
   }
 }
 `
@@ -36,6 +37,7 @@ mutation createBook($title: String!, $author: String!, $published: Int!, $genres
       name
     }
     published
+    genres
   }
 }
 `

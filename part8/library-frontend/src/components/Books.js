@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
+import Filter from './Filter'
+import Book from './Book'
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
+  const [filter, setFilter] = useState(null)
 
   if (!props.show) {
     return null
   }
 
   const books = result.data.allBooks
+  const filteredBooks = books.filter(book => filter ? book.genres.includes(filter) : true)
 
   return (
     <div>
@@ -26,15 +30,12 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {books.map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
+          {filteredBooks.map(book =>
+            <Book key={book.title} book={book} />
           )}
         </tbody>
       </table>
+      <Filter books={books} setFilter={setFilter} />
     </div>
   )
 }
