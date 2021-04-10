@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
-import Filter from './Filter'
-import Book from './Book'
+import Filter from '../components/Filter'
+import Book from '../components/Book'
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)

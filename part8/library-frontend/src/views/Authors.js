@@ -1,6 +1,6 @@
 
 import React from 'react'
-import BirthYearSetter from './BirthYearSetter'
+import BirthYearSetter from '../components/BirthYearSetter'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
 

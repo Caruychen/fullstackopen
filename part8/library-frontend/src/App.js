@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from 'react'
-import Authors from './components/Authors'
-import Books from './components/Books'
-import NewBook from './components/NewBook'
-import LoginForm from './components/LoginForm'
+import Authors from './views/Authors'
+import Books from './views/Books'
+import NewBook from './views/NewBook'
+import LoginForm from './views/LoginForm'
 import { useApolloClient } from '@apollo/client'
 
 const App = () => {
