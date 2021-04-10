@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
 import { LOGIN } from '../queries'
 
-const LoginForm = ({ setToken, show, setPage }) => {
+const LoginForm = ({ setToken, show, setPage, refetch }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [login, result] = useMutation(LOGIN, {
@@ -17,6 +17,7 @@ const LoginForm = ({ setToken, show, setPage }) => {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('user-token', token)
+      refetch()
     }
   }, [result.data]) //eslint-disable-line
 
