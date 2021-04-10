@@ -6,7 +6,6 @@ import Select from 'react-select'
 const BirthYearSetter = ({ authors }) => {
   const [name, setName] = useState('')
   const [bornString, setBorn] = useState('')
-
   const [editAuthor] = useMutation(EDIT_AUTHOR)
 
   const submit = async (event) => {
@@ -21,6 +20,7 @@ const BirthYearSetter = ({ authors }) => {
 
   const options = authors.map(author => ({ value: author.name, label: author.name }))
 
+  if (!localStorage.getItem('user-token')) return null
   return (
     <div>
       <h2>Set birthyear</h2>
