@@ -1,11 +1,11 @@
 import React from 'react'
 import Book from './Book'
 
-const BooksTable = ({ header, books, filter }) => {
+const BooksTable = ({ header, books, children }) => {
   return (
     <div>
       <h2>{header}</h2>
-      <p>in genre <b>{filter ? filter : "all genres"}</b></p>
+      {children}
       <table>
         <tbody>
           <tr>

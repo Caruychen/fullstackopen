@@ -13,7 +13,9 @@ const Books = ({ show, bookData }) => {
 
   return (
     <div>
-      <BooksTable header="books" books={filteredBooks} filter={filter}/>
+      <BooksTable header="books" books={filteredBooks}>
+        <p>in genre <b>{filter ? filter : "all genres"}</b></p>
+      </BooksTable>
       <Filter books={bookData.allBooks} setFilter={setFilter} />
     </div>
   )
