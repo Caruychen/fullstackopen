@@ -3,23 +3,23 @@ import Authors from './views/Authors'
 import Books from './views/Books'
 import NewBook from './views/NewBook'
 import LoginForm from './views/LoginForm'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { ALL_BOOKS, ME } from './queries'
+import { useApolloClient, useLazyQuery } from '@apollo/client'
+import { ME } from './queries'
 import Recommended from './views/Recommended'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
-  const { data: bookData } = useQuery(ALL_BOOKS)
-  const { data: user, refetch } = useQuery(ME)
+  const [getMe, { data: user }] = useLazyQuery(ME)
   const client = useApolloClient()
 
   useEffect(() => {
     const loggedUserToken = localStorage.getItem('user-token')
     if (loggedUserToken) {
       setToken(loggedUserToken)
+      getMe()
     }
-  }, [])
+  }, [getMe])
 
   const logout = () => {
     setToken(null)
@@ -50,7 +50,6 @@ const App = () => {
 
       <Books
         show={page === 'books'}
-        bookData={bookData}
       />
 
       <NewBook
@@ -59,7 +58,6 @@ const App = () => {
 
       {user && user.me && <Recommended
         show={page === 'recommend'}
-        bookData={bookData}
         favoriteGenre={user.me.favoriteGenre}
       />}
 
@@ -67,7 +65,7 @@ const App = () => {
         show={page === 'login'}
         setToken={setToken}
         setPage={setPage}
-        refetch={refetch}
+        getUser={getMe}
       />
 
     </div>

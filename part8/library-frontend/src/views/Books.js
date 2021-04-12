@@ -1,22 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Filter from '../components/Filter'
 import BooksTable from '../components/BooksTable'
+import { useLazyQuery } from '@apollo/client'
+import { ALL_BOOKS } from '../queries'
 
-const Books = ({ show, bookData }) => {
-  const [filter, setFilter] = useState(null)
+const Books = ({ show }) => {
+  const [genre, setGenre] = useState(null)
+  const [books, setBooks] = useState(null)
+  const [getAllBooks, { loading, data }] = useLazyQuery(ALL_BOOKS)
+  
+  useEffect(() => {
+    getAllBooks({ variables: { genre } })
+  }, [getAllBooks, genre])
+
+  useEffect(() => {
+    !loading && setBooks(data ? data.allBooks : null)
+  }, [loading, data])
 
   if (!show) {
     return null
   }
 
-  const filteredBooks = bookData.allBooks.filter(book => filter ? book.genres.includes(filter) : true)
-
   return (
     <div>
-      <BooksTable header="books" books={filteredBooks}>
-        <p>in genre <b>{filter ? filter : "all genres"}</b></p>
+      <BooksTable header="books" books={books}>
+        <p>in genre <b>{genre ? genre : "all genres"}</b></p>
       </BooksTable>
-      <Filter books={bookData.allBooks} setFilter={setFilter} />
+      <Filter setFilter={setGenre} />
     </div>
   )
 }

@@ -1,7 +1,14 @@
-import React from 'react'
+import { useQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
+import { ALL_BOOKS } from '../queries'
 
-const Filter = ({ books, setFilter }) => {
-  const genres = [...new Set(books.flatMap(book => book.genres))]
+const Filter = ({ setFilter }) => {
+  const { loading, data } = useQuery(ALL_BOOKS)
+  const [genres, setGenres] = useState([])
+  
+  useEffect(() => {
+    !loading && setGenres([...new Set(data.allBooks.flatMap(book => book.genres))])
+  }, [loading, data])
 
   return (
     <div>
