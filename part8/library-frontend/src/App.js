@@ -6,12 +6,14 @@ import LoginForm from './views/LoginForm'
 import { useApolloClient, useLazyQuery, useSubscription } from '@apollo/client'
 import { BOOK_ADDED, ME } from './queries'
 import Recommended from './views/Recommended'
+import useUpdateCache from './hooks/useUpdateCache'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const [getMe, { data: user }] = useLazyQuery(ME)
   const client = useApolloClient()
+  const updateCache = useUpdateCache()
 
   useEffect(() => {
     const loggedUserToken = localStorage.getItem('user-token')
@@ -23,6 +25,7 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
+      updateCache(subscriptionData.data.bookAdded)
       window.alert(`New book '${subscriptionData.data.bookAdded.title}' added`)
     }
   })
