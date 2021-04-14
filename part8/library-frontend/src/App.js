@@ -3,8 +3,8 @@ import Authors from './views/Authors'
 import Books from './views/Books'
 import NewBook from './views/NewBook'
 import LoginForm from './views/LoginForm'
-import { useApolloClient, useLazyQuery } from '@apollo/client'
-import { ME } from './queries'
+import { useApolloClient, useLazyQuery, useSubscription } from '@apollo/client'
+import { BOOK_ADDED, ME } from './queries'
 import Recommended from './views/Recommended'
 
 const App = () => {
@@ -20,6 +20,12 @@ const App = () => {
       getMe()
     }
   }, [getMe])
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      window.alert(`New book '${subscriptionData.data.bookAdded.title}' added`)
+    }
+  })
 
   const logout = () => {
     setToken(null)

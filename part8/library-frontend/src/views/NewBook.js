@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { ALL_AUTHORS, CREATE_BOOK } from '../queries'
+import { useMutation } from '@apollo/client'
+import { ALL_AUTHORS, BOOK_DETAILS, CREATE_BOOK } from '../queries'
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -17,17 +17,7 @@ const NewBook = (props) => {
           allBooks(existingBooks = []) {
             const newBookRef = cache.writeFragment({
               data: addBook,
-              fragment: gql`
-                fragment NewBook on Book {
-                  id
-                  title
-                  author {
-                    name
-                  }
-                  published
-                  genres
-                }
-              `
+              fragment: BOOK_DETAILS
             })
             return [...existingBooks, newBookRef]
           }
