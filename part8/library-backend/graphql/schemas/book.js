@@ -1,6 +1,8 @@
-const { UserInputError } = require('apollo-server')
+const { UserInputError, PubSub } = require('apollo-server')
 const Book = require('../../models/book')
 const Author = require('../../models/author')
+
+const pubsub = new PubSub()
 
 const typeDef = `
   type Book {
@@ -23,6 +25,10 @@ const typeDef = `
       published: Int!
       genres: [String!]!
     ): Book
+  }
+
+  type Subscription {
+    bookAdded: Book!
   }
 `
 
@@ -68,9 +74,17 @@ const resolvers = {
           invalidArgs: args
         })
       }
+      const savedBook = await book.populate('Author').execPopulate()
 
-      return await book.populate('Author').execPopulate()
+      pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
+
+      return savedBook
     },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    }
   },
   Book: {
     author: (root) => Author.findById(root.author)
