@@ -18,8 +18,6 @@ const NewBook = (props) => {
     }
   })
 
-  if (!props.show) return null
-
   const submit = async (event) => {
     event.preventDefault()
 
@@ -38,6 +36,7 @@ const NewBook = (props) => {
     setGenre('')
   }
 
+  if (!props.show) return null
   return (
     <div>
       <form onSubmit={submit}>

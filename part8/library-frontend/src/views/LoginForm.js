@@ -21,13 +21,12 @@ const LoginForm = ({ setToken, show, setPage, getUser }) => {
     }
   }, [result.data, setToken, getUser])
 
-  if (!show) return null
-
   const submit = async (event) => {
     event.preventDefault()
     login({ variables: { username, password } })
   }
 
+  if (!show) return null
   return (
     <div>
       <h2>Login</h2>

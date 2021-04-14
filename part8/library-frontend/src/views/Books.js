@@ -17,10 +17,7 @@ const Books = ({ show }) => {
     !loading && setBooks(data ? data.allBooks : null)
   }, [loading, data])
 
-  if (!show) {
-    return null
-  }
-
+  if (!show) return null
   return (
     <div>
       <BooksTable header="books" books={books}>

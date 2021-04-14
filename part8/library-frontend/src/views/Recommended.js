@@ -10,10 +10,7 @@ const Recommended = ({ show, favoriteGenre }) => {
     getAllBooks({ variables: { genre: favoriteGenre } })
   }, [getAllBooks, favoriteGenre])
 
-  if (!show) {
-    return null
-  }
-  
+  if (!show) return null  
   return (
     <BooksTable header="recommendations" books={data.allBooks}>
       <p>books in your favorite genre <b>{favoriteGenre ? favoriteGenre : "all genres"}</b></p>
