@@ -17,6 +17,8 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, us
     console.error('error connecting to MongoDB:', error.message)
   })
 
+mongoose.set('debug', true)
+
 const server = new ApolloServer({
   schema,
   context: async ({ req }) => {

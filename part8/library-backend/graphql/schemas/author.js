@@ -8,6 +8,7 @@ const typeDef = `
     id: ID!
     born: Int
     bookCount: Int!
+    books: [Book!]!
   }
 
   extend type Query {
@@ -31,7 +32,7 @@ const typeDef = `
 const resolvers = {
   Query: {
     authorCount: () => Author.countDocuments({}),
-    allAuthors: () => Author.find({})
+    allAuthors: () => Author.find({}).populate('books')
   },
   Mutation: {
     addAuthor: async (root, args) => {
@@ -55,7 +56,7 @@ const resolvers = {
     }
   },
   Author: {
-    bookCount: (root) => Book.countDocuments({ author: root }),
+    bookCount: (root) => root.books.length
   },
 }
 

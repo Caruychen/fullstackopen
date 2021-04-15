@@ -50,23 +50,16 @@ const resolvers = {
       if (!currentUser) throw new UserInputError('not authenticated')
 
       let author = await Author.findOne({ name: args.author })
-      if (!author) {
-        author = new Author({ name: args.author })
-        try {
-          await author.save()
-        }
-        catch (error) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args.author
-          })
-        }
-      }
+      if (!author) author = new Author({ name: args.author })
 
       const book = new Book({
         ...args,
         author: author._id
       })
+      author.books = author.books.concat(book._id)
+
       try {
+        await author.save()
         await book.save()
       }
       catch (error) {
@@ -74,10 +67,10 @@ const resolvers = {
           invalidArgs: args
         })
       }
+
       const savedBook = await book.populate('Author').execPopulate()
-
+      
       pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
-
       return savedBook
     },
   },
