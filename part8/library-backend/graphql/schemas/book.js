@@ -52,10 +52,7 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if (!author) author = new Author({ name: args.author })
 
-      const book = new Book({
-        ...args,
-        author: author._id
-      })
+      const book = new Book({ ...args, author: author._id })
       author.books = author.books.concat(book._id)
 
       try {
@@ -69,7 +66,7 @@ const resolvers = {
       }
 
       const savedBook = await book.populate('Author').execPopulate()
-      
+
       pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
       return savedBook
     },
