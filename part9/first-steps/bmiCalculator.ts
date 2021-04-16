@@ -3,7 +3,7 @@ interface bmiInputs {
   weight: number
 }
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const heightMeters = height / 100
   const bmi = weight / (heightMeters * heightMeters)
   switch (true) {
