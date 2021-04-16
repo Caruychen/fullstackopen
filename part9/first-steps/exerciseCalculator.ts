@@ -29,7 +29,7 @@ const rater = (average: number, target: number): Rating => {
   }
 };
 
-const calculateExercises = (exerciseHours: Array<number>, target: number): Result => {
+export const calculateExercises = (exerciseHours: Array<number>, target: number): Result => {
   const periodLength = exerciseHours.length;
   const trainingDays = exerciseHours.reduce((total, currentDay) => currentDay > 0 ? total + 1 : total, 0);
   const average = exerciseHours.reduce((total, currentDay) => total + currentDay) / exerciseHours.length;
