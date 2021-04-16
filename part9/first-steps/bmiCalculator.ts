@@ -38,5 +38,6 @@ try {
   console.log(calculateBmi(height, weight));
 }
 catch (error) {
-  console.log('Oops, something went wrong:', error);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  console.log('Oops, something went wrong:', error.message);
 }

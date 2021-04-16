@@ -65,5 +65,6 @@ try {
   const { exerciseHours, target } = parseExerciseInputs(process.argv);
   console.log(calculateExercises(exerciseHours, target));
 } catch (error) {
-  console.log('Oops, something went wrong:', error);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  console.log('Oops, something went wrong:', error.message);
 }
