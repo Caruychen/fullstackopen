@@ -1,10 +1,10 @@
 import express from 'express';
+import patientsService from '../services/patientsService';
 
-const router = express.Router();
+const patientsRouter = express.Router();
 
-router.get('/', (_req, res) => {
-  console.log('getting patient records');
-  res.send('Patient records');
+patientsRouter.get('/', (_req, res) => {
+  res.send(patientsService.getPatients());
 });
 
-export default router;
+export default patientsRouter;
