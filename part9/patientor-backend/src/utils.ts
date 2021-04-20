@@ -13,9 +13,9 @@ const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
 };
 
-const parseString = (text: unknown, field: string): string => {
+const parseString = (text: unknown): string => {
   if (!text || !isString(text)) {
-    throw new Error(`Incorrect or missing ${field}`);
+    throw new Error(`Incorrect or missing text`);
   }
   return text;
 };
@@ -36,11 +36,11 @@ const parseGender = (gender: unknown): Gender => {
 
 const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation }: NewPatientFields): NewPatientType => {
   const newPatient: NewPatientType = {
-    name: parseString(name, 'name'),
+    name: parseString(name),
     dateOfBirth: parseDate(dateOfBirth),
-    ssn: parseString(ssn, 'ssn'),
+    ssn: parseString(ssn),
     gender: parseGender(gender),
-    occupation: parseString(occupation, 'occupation')
+    occupation: parseString(occupation)
   };
   return newPatient;
 };
