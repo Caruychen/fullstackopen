@@ -1,7 +1,7 @@
 import React from 'react';
-import { course } from './types';
+import { CoursePart } from '../types';
 
-const Total = ({ courseParts }: { courseParts: Array<course> }) => {
+const Total = ({ courseParts }: { courseParts: Array<CoursePart> }) => {
   return (
     <p>
       Number of exercises{" "}
@@ -10,4 +10,4 @@ const Total = ({ courseParts }: { courseParts: Array<course> }) => {
   )
 };
 
-export default Total;
+export default Total
