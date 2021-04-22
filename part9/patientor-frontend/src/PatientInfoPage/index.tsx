@@ -36,7 +36,7 @@ const PatientInfoPage = () => {
           <p>
             ssn: {currentPatient.ssn}
             <br />
-          occupation: {currentPatient.occupation}
+            occupation: {currentPatient.occupation}
           </p>
           <Header as="h3">entries</Header>
           {currentPatient.entries.map(entry => {
