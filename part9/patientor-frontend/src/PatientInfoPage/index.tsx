@@ -15,6 +15,7 @@ const PatientInfoPage = () => {
     const fetchPatientInfo = async () => {
       try {
         const { data: patientInfoFromApi } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
+        console.log(patientInfoFromApi);
         dispatch(setPatientInfo(patientInfoFromApi));
       }
       catch (e) {

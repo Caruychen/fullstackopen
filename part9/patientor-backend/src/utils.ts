@@ -13,9 +13,13 @@ const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
 };
 
-/* TO-DO: update typeguard */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isEntry = (entry: any): entry is Entry => {
+  return ["Hospital", "OccupationalHealthcare", "HealthCheck"].includes(entry.type);
+};
+
 const isEntries = (entries: unknown): entries is Entry[] => {
-  return typeof entries !== undefined;
+  return Array.isArray(entries) && entries.every(entry => isEntry(entry));
 };
 
 export const parseString = (text: unknown): string => {
