@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Header, Container } from "semantic-ui-react";
+import { Header, Container, List } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
 import { setPatientInfo, useStateValue } from "../state";
 import { Patient } from "../types";
@@ -10,42 +10,50 @@ import Gender from "../components/Gender";
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patients }, dispatch] = useStateValue();
+  const currentPatient = patients[id];
+  const isPrivateLoaded = () => 'ssn' in currentPatient;
 
   useEffect(() => {
     const fetchPatientInfo = async () => {
       try {
         const { data: patientInfoFromApi } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
-        console.log(patientInfoFromApi);
         dispatch(setPatientInfo(patientInfoFromApi));
       }
       catch (e) {
         console.error(e);
       }
     };
-
-    if (patients[id] && 'ssn' in patients[id] === false) {
+    if (currentPatient && !isPrivateLoaded()) {
       void fetchPatientInfo();
     }
   }, [dispatch, patients]);
 
-  const findPatient = (id: string): Patient | undefined => {
-    return Object.values(patients).find((patient: Patient) => patient.id === id);
-  };
-  const patient = findPatient(id);
-
-  if (!patient) return null;
-  return (
-    <div className="App">
-      <Container>
-        <Header as="h2">{patient.name} <Gender gender={patient.gender}></Gender></Header>
-        <p>
-          ssn: {patient.ssn}
-          <br />
-          occupation: {patient.occupation}
-        </p>
-      </Container>
-    </div>
-  );
+  if (currentPatient && isPrivateLoaded()) {
+    return (
+      <div className="App">
+        <Container>
+          <Header as="h2">{currentPatient.name} <Gender gender={currentPatient.gender}></Gender></Header>
+          <p>
+            ssn: {currentPatient.ssn}
+            <br />
+          occupation: {currentPatient.occupation}
+          </p>
+          <Header as="h3">entries</Header>
+          {currentPatient.entries.map(entry => {
+            return (
+              <Container key={entry.id}>
+                <p>{entry.description}</p>
+                <List bulleted>
+                  {entry.diagnosisCodes?.map(code => <List.Item key={code}>{code}</List.Item>)}
+                </List>
+              </Container>
+            );
+          })}
+        </Container>
+      </div>
+    );
+  }
+  return null;
 };
 
 export default PatientInfoPage;
