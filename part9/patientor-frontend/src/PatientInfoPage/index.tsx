@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import { Header, Container, List } from "semantic-ui-react";
+import { Header, Container } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
 import { setPatientInfo, useStateValue } from "../state";
 import { Patient } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import Gender from "../components/Gender";
+import EntryDetails from "./EntryDetails/index";
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   const currentPatient = patients[id];
   const isPrivateLoaded = () => 'ssn' in currentPatient;
 
@@ -41,12 +42,7 @@ const PatientInfoPage = () => {
           <Header as="h3">entries</Header>
           {currentPatient.entries.map(entry => {
             return (
-              <Container key={entry.id}>
-                <p>{entry.description}</p>
-                <List bulleted>
-                  {entry.diagnosisCodes?.map(code => <List.Item key={code}>{code} {diagnoses[code].name}</List.Item>)}
-                </List>
-              </Container>
+              <EntryDetails key={entry.id} entry={entry}/>
             );
           })}
         </Container>
