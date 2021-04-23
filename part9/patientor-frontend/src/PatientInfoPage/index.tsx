@@ -9,7 +9,7 @@ import Gender from "../components/Gender";
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const currentPatient = patients[id];
   const isPrivateLoaded = () => 'ssn' in currentPatient;
 
@@ -44,7 +44,7 @@ const PatientInfoPage = () => {
               <Container key={entry.id}>
                 <p>{entry.description}</p>
                 <List bulleted>
-                  {entry.diagnosisCodes?.map(code => <List.Item key={code}>{code}</List.Item>)}
+                  {entry.diagnosisCodes?.map(code => <List.Item key={code}>{code} {diagnoses[code].name}</List.Item>)}
                 </List>
               </Container>
             );
