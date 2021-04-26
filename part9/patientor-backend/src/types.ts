@@ -12,7 +12,7 @@ interface BaseEntry {
   diagnosisCodes?: Array<DiagnosisType['code']>
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
@@ -75,3 +75,33 @@ export enum Gender {
   Female = 'female',
   Other = 'other'
 }
+
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+// Define Entry without the 'id' property
+export type NewEntry = UnionOmit<Entry, 'id'>;
+
+interface NewBaseEntryFields {
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes?: unknown
+}
+
+interface NewHospitalEntryFields extends NewBaseEntryFields {
+  type: "Hospital";
+  discharge: unknown;
+}
+
+interface NewOccupationalHealthCareEntryFields extends NewBaseEntryFields {
+  type: "OccupationalHealthcare";
+  employerName: unknown;
+  sickLeave?: unknown;
+}
+
+interface NewHealthCheckEntryFields extends NewBaseEntryFields {
+  type: "HealthCheck";
+  healthCheckRating: unknown;
+}
+
+export type NewEntryFields = NewHospitalEntryFields | NewOccupationalHealthCareEntryFields | NewHealthCheckEntryFields;

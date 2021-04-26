@@ -1,4 +1,8 @@
-import { NewPatientType, Gender, NewPatientFields, Entry } from './types';
+import { NewPatientType, Gender, NewPatientFields, Entry, NewEntryFields, NewEntry, Discharge, HealthCheckRating } from './types';
+
+const assertNever = (value: never): never => {
+  throw new Error(`Unhandled entry type union member:' ${value}`);
+};
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -22,9 +26,23 @@ const isEntries = (entries: unknown): entries is Entry[] => {
   return Array.isArray(entries) && entries.every(entry => isEntry(entry));
 };
 
+const isDischarge = (discharge: unknown): discharge is Discharge => {
+  return (
+    discharge instanceof Object &&
+    discharge !== null &&
+    'date' in discharge &&
+    'criteria' in discharge
+  );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isHealthCheckrating = (rating: any): rating is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(rating);
+};
+
 export const parseString = (text: unknown): string => {
   if (!text || !isString(text)) {
-    throw new Error(`Incorrect or missing text`);
+    throw new Error(`Incorrect or missing text ${text}`);
   }
   return text;
 };
@@ -45,12 +63,26 @@ const parseGender = (gender: unknown): Gender => {
 
 const parseEntries = (entries: unknown): Entry[] => {
   if (!entries || !isEntries(entries)) {
-    throw new Error(`Incorrect or missing entries`);
+    throw new Error(`Incorrect or missing entries ${entries}`);
   }
   return entries;
 };
 
-const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries }: NewPatientFields): NewPatientType => {
+const parseDischarge = (discharge: unknown): Discharge => {
+  if (!discharge || !isDischarge(discharge)) {
+    throw new Error(`Incorrect or missing discharge ${discharge}`);
+  }
+  return discharge;
+};
+
+const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+  if (!rating || !isHealthCheckrating(rating)) {
+    throw new Error(`Incorrect or missing healthCheckRating: ${rating}`);
+  }
+  return rating;
+};
+
+export const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries }: NewPatientFields): NewPatientType => {
   const newPatient: NewPatientType = {
     name: parseString(name),
     dateOfBirth: parseDate(dateOfBirth),
@@ -62,4 +94,34 @@ const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries }: N
   return newPatient;
 };
 
-export default toNewPatient;
+export const toNewEntry = (params: NewEntryFields): NewEntry => {
+  const baseFields = {
+    description: parseString(params.description),
+    date: parseDate(params.date),
+    specialist: parseString(params.specialist)
+  };
+
+  switch (params.type) {
+    case "Hospital":
+      return {
+        ...baseFields,
+        type: params.type,
+        discharge: parseDischarge(params.discharge),
+      };
+    case "OccupationalHealthcare":
+      return {
+        ...baseFields,
+        type: params.type,
+        employerName: parseString(params.employerName)
+      };
+    case "HealthCheck":
+      return {
+        ...baseFields,
+        type: params.type,
+        healthCheckRating: parseHealthCheckRating(params.healthCheckRating)
+      };
+    default:
+      assertNever(params);
+      throw new Error(`Incorrect or missing element in entry ${params}`);
+  }
+};
