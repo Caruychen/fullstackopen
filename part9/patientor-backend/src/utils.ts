@@ -40,6 +40,11 @@ const isHealthCheckrating = (rating: any): rating is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(rating);
 };
 
+
+const isDiagnosisCodes = (codes: unknown): codes is string[] => {
+  return Array.isArray(codes) && codes.every(code => typeof code === "string");
+};
+
 export const parseString = (text: unknown): string => {
   if (!text || !isString(text)) {
     throw new Error(`Incorrect or missing text ${text}`);
@@ -72,6 +77,9 @@ const parseDischarge = (discharge: unknown): Discharge => {
   if (!discharge || !isDischarge(discharge)) {
     throw new Error(`Incorrect or missing discharge ${discharge}`);
   }
+  if (!isDate(discharge.date)) {
+    throw new Error(`Incorrect or missing date in discharge ${discharge.date}`);
+  }
   return discharge;
 };
 
@@ -80,6 +88,13 @@ const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
     throw new Error(`Incorrect or missing healthCheckRating: ${rating}`);
   }
   return rating;
+};
+
+const parseDiagnosisCodes = (codes: unknown): string[] => {
+  if (!codes || !isDiagnosisCodes(codes)) {
+    throw new Error(`Incorrect or missing diagnosis codes ${codes}`);
+  }
+  return codes;
 };
 
 export const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries }: NewPatientFields): NewPatientType => {
@@ -98,7 +113,8 @@ export const toNewEntry = (params: NewEntryFields): NewEntry => {
   const baseFields = {
     description: parseString(params.description),
     date: parseDate(params.date),
-    specialist: parseString(params.specialist)
+    specialist: parseString(params.specialist),
+    diagnosisCodes: parseDiagnosisCodes(params.diagnosisCodes)
   };
 
   switch (params.type) {

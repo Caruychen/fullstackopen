@@ -9,7 +9,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<DiagnosisType['code']>
+  diagnosisCodes: Array<DiagnosisType['code']>
 }
 
 export interface Discharge {
@@ -85,7 +85,7 @@ interface NewBaseEntryFields {
   description: unknown;
   date: unknown;
   specialist: unknown;
-  diagnosisCodes?: unknown
+  diagnosisCodes: unknown
 }
 
 interface NewHospitalEntryFields extends NewBaseEntryFields {
