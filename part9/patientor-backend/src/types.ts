@@ -67,7 +67,7 @@ export type NewPatientFields = {
   ssn: unknown,
   gender: unknown,
   occupation: unknown,
-  entries: unknown
+  entries?: unknown
 };
 
 export enum Gender {

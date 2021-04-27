@@ -76,7 +76,7 @@ const parseDischarge = (discharge: unknown): Discharge => {
 };
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!rating || !isHealthCheckrating(rating)) {
+  if ((!rating && rating !== 0) || !isHealthCheckrating(rating)) {
     throw new Error(`Incorrect or missing healthCheckRating: ${rating}`);
   }
   return rating;
@@ -89,7 +89,7 @@ export const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entri
     ssn: parseString(ssn),
     gender: parseGender(gender),
     occupation: parseString(occupation),
-    entries: parseEntries(entries)
+    entries: entries ? parseEntries(entries) : []
   };
   return newPatient;
 };
