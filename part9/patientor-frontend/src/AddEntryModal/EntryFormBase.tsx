@@ -29,10 +29,24 @@ const EntryFormBase = ({ children, initialValues, onSubmit, onCancel }: Props) =
         const errors: { [field: string]: string } = {};
         if (!values.description) errors.description = requiredError;
         if (!values.date) errors.date = requiredError;
+        else {
+          if (!Date.parse(values.date)) errors.date = "Malformatted date";
+        }
         if (!values.specialist) errors.specialist = requiredError;
         if (values.type === "Hospital") {
           if (!values.discharge.date) errors.discharge = requiredError;
+          else {
+            if (!Date.parse(values.discharge.date)) errors.discharge = "Malformatted date";
+          }
           if (!values.discharge.criteria) errors.discharge = requiredError;
+        }
+        if (values.type === "OccupationalHealthcare") {
+          if (!values.employerName) errors.employerName = requiredError;
+          if (values.sickLeave?.startDate && values.sickLeave?.endDate) {
+            if (!Date.parse(values.sickLeave.startDate) || !Date.parse(values.sickLeave.endDate)) {
+              errors.sickLeave = "Malformatted date";
+            }
+          } 
         }
         return errors;
       }

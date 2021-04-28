@@ -1,15 +1,19 @@
 import React from 'react';
 import { Field } from 'formik';
-import EntryFormBase, { EntryFormValues } from './EntryFormBase';
+import { EntryFormValues } from './EntryFormBase';
 import { NestedTextField } from '../AddPatientModal/FormField';
+
+interface BaseProps {
+  children: React.ReactNode;
+  initialValues: EntryFormValues;
+}
 
 interface Props {
   show: string;
-  onSubmit: (values: EntryFormValues) => void;
-  onCancel: () => void;
+  EntryFormBase: ({children, initialValues}: BaseProps) => JSX.Element
 }
 
-const EntryFormHospital = ({ show, onSubmit, onCancel }: Props) => {
+const EntryFormHospital = ({ show, EntryFormBase }: Props) => {
   if (show !== "Hospital") return null;
   return (
     <EntryFormBase
@@ -24,8 +28,6 @@ const EntryFormHospital = ({ show, onSubmit, onCancel }: Props) => {
           criteria: ""
         }
       }}
-      onSubmit={onSubmit}
-      onCancel={onCancel}
     >
       <Field
         label="Discharge"

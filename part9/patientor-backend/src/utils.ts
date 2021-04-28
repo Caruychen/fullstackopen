@@ -1,4 +1,14 @@
-import { NewPatientType, Gender, NewPatientFields, Entry, NewEntryFields, NewEntry, Discharge, HealthCheckRating } from './types';
+import {
+  NewPatientType,
+  Gender,
+  NewPatientFields,
+  Entry,
+  NewEntryFields,
+  NewEntry,
+  Discharge,
+  HealthCheckRating,
+  SickLeave
+} from './types';
 
 const assertNever = (value: never): never => {
   throw new Error(`Unhandled entry type union member:' ${value}`);
@@ -40,9 +50,24 @@ const isHealthCheckrating = (rating: any): rating is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(rating);
 };
 
-
 const isDiagnosisCodes = (codes: unknown): codes is string[] => {
   return Array.isArray(codes) && codes.every(code => typeof code === "string");
+};
+
+const isSickLeave = (sickLeave: unknown): sickLeave is SickLeave => {
+  return (
+    sickLeave instanceof Object &&
+    sickLeave !== null &&
+    'startDate' in sickLeave &&
+    'endDate' in sickLeave
+  );
+};
+
+const validDates = (sickLeave: SickLeave): boolean => {
+  return (
+    isString(sickLeave.startDate) && isDate(sickLeave.startDate) &&
+    isString(sickLeave.endDate) && isDate(sickLeave.endDate)
+  );
 };
 
 export const parseString = (text: unknown): string => {
@@ -97,6 +122,18 @@ const parseDiagnosisCodes = (codes: unknown): string[] => {
   return codes;
 };
 
+const parseSickLeave = (sickLeave: unknown): SickLeave | undefined => {
+  if (sickLeave && isSickLeave(sickLeave)) {
+    if (validDates(sickLeave)) {
+      return sickLeave;
+    }
+    else if (sickLeave.startDate.length === 0 && sickLeave.endDate.length === 0) {
+      return undefined;
+    }
+  }
+  throw new Error(`malformatted sickleave ${JSON.stringify(sickLeave)}`);
+};
+
 export const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries }: NewPatientFields): NewPatientType => {
   const newPatient: NewPatientType = {
     name: parseString(name),
@@ -125,11 +162,13 @@ export const toNewEntry = (params: NewEntryFields): NewEntry => {
         discharge: parseDischarge(params.discharge),
       };
     case "OccupationalHealthcare":
-      return {
+      const fields = {
         ...baseFields,
         type: params.type,
-        employerName: parseString(params.employerName)
+        employerName: parseString(params.employerName),
       };
+      const sickLeave = parseSickLeave(params.sickLeave);
+      return sickLeave ? { ...fields, sickLeave } : fields;
     case "HealthCheck":
       return {
         ...baseFields,

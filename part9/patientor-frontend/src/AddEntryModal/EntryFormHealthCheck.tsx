@@ -3,15 +3,18 @@ import React from 'react';
 import { NumberField } from '../AddPatientModal/FormField';
 import { HealthCheckRating } from '../types';
 import { EntryFormValues } from './EntryFormBase';
-import EntryFormBase from './EntryFormBase';
 
-interface Props {
-  show: string,
-  onSubmit: (values: EntryFormValues) => void;
-  onCancel: () => void;
+interface BaseProps {
+  children: React.ReactNode;
+  initialValues: EntryFormValues;
 }
 
-const EntryFormHealthCheck = ({ show, onSubmit, onCancel }: Props) => {
+interface Props {
+  show: string;
+  EntryFormBase: ({children, initialValues}: BaseProps) => JSX.Element
+}
+
+const EntryFormHealthCheck = ({ show, EntryFormBase}: Props) => {
   if (show !== "HealthCheck") return null;
   return (
     <EntryFormBase
@@ -23,8 +26,6 @@ const EntryFormHealthCheck = ({ show, onSubmit, onCancel }: Props) => {
         diagnosisCodes: [],
         healthCheckRating: HealthCheckRating.Healthy
       }}
-      onSubmit={onSubmit}
-      onCancel={onCancel}
     >
       <Field
         label="Health Check Rating"
